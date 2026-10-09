@@ -11,30 +11,25 @@ import torch
 import torch.nn.functional as F
 from PIL import Image
 from scipy.ndimage import gaussian_filter
-from torchvision import transforms
 
 try:
     # When used as part of the installed mango_disease_ai package
-    from mango_disease_ai.model import CLASSES, IMG_SIZE, IMAGENET_MEAN, IMAGENET_STD, load_model, load_mango_detector
+    from mango_disease_ai.model import CACHE_SIZE, CLASSES, IMG_SIZE, load_model, load_mango_detector
 except ImportError:
     # Fallback for running directly from the project root (dev mode)
-    from model import CLASSES, IMG_SIZE, IMAGENET_MEAN, IMAGENET_STD, load_model, load_mango_detector
-
-# ── Transforms ───────────────────────────────────────────────────────────────
-eval_tf = transforms.Compose(
-    [
-        transforms.Resize((IMG_SIZE, IMG_SIZE)),
-        transforms.ToTensor(),
-        transforms.Normalize(IMAGENET_MEAN, IMAGENET_STD),
-    ]
-)
+    from model import CACHE_SIZE, CLASSES, IMG_SIZE, load_model, load_mango_detector
 
 
-def _denorm(t: torch.Tensor) -> torch.Tensor:
-    """Undo ImageNet normalisation for display."""
-    m = torch.tensor(IMAGENET_MEAN).view(3, 1, 1)
-    s = torch.tensor(IMAGENET_STD).view(3, 1, 1)
-    return (t * s + m).clamp(0, 1)
+# ── Preprocessing (same as the MAF-Net training notebook) ────────────────────
+def preprocess(pil_img: Image.Image) -> torch.Tensor:
+    """
+    RGB -> 256x256 (bicubic) -> 224x224 (bilinear, antialiased), scaled to [0, 1].
+    MAF-Net normalises the input itself, so no mean/std step here.
+    Returns a [1, 3, 224, 224] float tensor.
+    """
+    img = pil_img.convert("RGB").resize((CACHE_SIZE, CACHE_SIZE), Image.BICUBIC, reducing_gap=2.0)
+    x = torch.from_numpy(np.asarray(img, dtype=np.uint8).copy()).permute(2, 0, 1)[None].float() / 255
+    return F.interpolate(x, size=(IMG_SIZE, IMG_SIZE), mode="bilinear", align_corners=False, antialias=True)
 
 
 # ── Mango detection via CLIP zero-shot (openai/clip-vit-base-patch32) ────────
@@ -71,7 +66,9 @@ MANGO_POSITIVE_INDICES = {0, 1, 2, 3}
 
 # Second safety check used in core.analyze(): when CLIP is only moderately sure it
 # is a mango AND the disease model is also unsure, treat the photo as "not a mango".
-UNSURE_MODEL_CONFIDENCE = 0.60
+# MAF-Net was trained with label smoothing 0.1, so its top score stays below ~0.93
+# even for clear photos; 0.45 is the matching "unsure" level.
+UNSURE_MODEL_CONFIDENCE = 0.45
 UNSURE_MANGO_CONFIDENCE = 0.80
 
 
@@ -119,7 +116,7 @@ def validate_image(pil_img: Image.Image) -> tuple[bool, float]:
     produce a confident peak.
     """
     model = load_model()
-    x = eval_tf(pil_img.convert("RGB")).unsqueeze(0)
+    x = preprocess(pil_img)
 
     with torch.no_grad():
         logits = model(x)
@@ -132,13 +129,13 @@ def validate_image(pil_img: Image.Image) -> tuple[bool, float]:
 # ── Classification ───────────────────────────────────────────────────────────
 def classify_image(pil_img: Image.Image) -> dict:
     """
-    Run the AA-ENet model on a PIL image.
+    Run the MAF-Net model on a PIL image.
 
     Returns dict with keys:
         predicted_class, confidence, all_scores (list of {class, score})
     """
     model = load_model()
-    x = eval_tf(pil_img.convert("RGB")).unsqueeze(0)
+    x = preprocess(pil_img)
 
     with torch.no_grad():
         logits = model(x)
@@ -158,10 +155,12 @@ def classify_image(pil_img: Image.Image) -> dict:
 # ── Grad-CAM ────────────────────────────────────────────────────────────────
 class _GradCAM:
     """
-    Grad-CAM++ on the last spatial feature map (CBAM output).
+    Grad-CAM++ on MAF-Net's last backbone feature map (MobileNetV2 ``bn2``).
 
-  Uses torch.autograd.grad w.r.t. hooked activations — the same approach as the
-    research notebook — instead of backward hooks on detached tensors.
+    That stride-32 feature feeds 1280 of the head's 1408 inputs, and its maps
+    sit on the lesions; the fused 14x14 attention branch gives scattered rings.
+    Uses torch.autograd.grad w.r.t. hooked activations - the same approach as
+    the research notebook - instead of backward hooks on detached tensors.
     """
 
     def __init__(self, model, target_layer):
@@ -238,11 +237,11 @@ def generate_gradcam(pil_img: Image.Image, class_idx: int | None = None) -> dict
     was_training = model.training
     model.eval()
 
-    # CBAM is the last spatial layer before pooling / transformer fusion.
-    cam_engine = _GradCAM(model, model.cbam)
+    # Last backbone feature map (stride 32), the main input of the classifier.
+    cam_engine = _GradCAM(model, model.net.backbone.bn2)
 
     img_rgb = pil_img.convert("RGB")
-    x = eval_tf(img_rgb).unsqueeze(0)
+    x = preprocess(img_rgb)
 
     with torch.enable_grad():
         for param in model.parameters():

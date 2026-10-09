@@ -18,7 +18,7 @@ from typing import Union
 # When installed via `pip install mango-disease-ai`, the .pt file lives
 # right here alongside this module inside the installed package directory.
 _PKG_DIR = Path(__file__).parent
-_MODEL_PT = _PKG_DIR / "AA-ENet_proposed.pt"
+_MODEL_PT = _PKG_DIR / "MAF-Net_final_weights.pt"
 
 # Allow override via environment variable (useful in Docker / HF Spaces)
 _MODEL_PATH = Path(os.environ.get("MANGO_MODEL_PATH", str(_MODEL_PT)))
@@ -91,20 +91,25 @@ def analyze(
     >>> result = analyze("leaf.jpg", include_gradcam=False)
     """
     from PIL import Image as _PILImage
+    from PIL import ImageOps as _PILImageOps
 
     # ── Validate model weights (clear error for missing / LFS placeholder) ───
     from mango_disease_ai.model import resolve_model_path
     resolve_model_path()
 
     # ── Convert input to PIL Image ───────────────────────────────────────────
+    def _upright(img):
+        # Phone photos: apply the EXIF rotation, as in training
+        return _PILImageOps.exif_transpose(img).convert("RGB")
+
     if isinstance(image, _PILImage.Image):
         pil_img = image.convert("RGB")
     elif isinstance(image, (str, os.PathLike)):
-        pil_img = _PILImage.open(image).convert("RGB")
+        pil_img = _upright(_PILImage.open(image))
     elif isinstance(image, bytes):
-        pil_img = _PILImage.open(io.BytesIO(image)).convert("RGB")
+        pil_img = _upright(_PILImage.open(io.BytesIO(image)))
     elif hasattr(image, "read"):
-        pil_img = _PILImage.open(image).convert("RGB")
+        pil_img = _upright(_PILImage.open(image))
     else:
         raise TypeError(
             f"Unsupported image type: {type(image).__name__}. "

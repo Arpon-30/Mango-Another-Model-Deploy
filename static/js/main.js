@@ -281,10 +281,10 @@
         (busy ? show : hide)(loading);
     }
 
-    // Real AA-ENet output for a dataset photo (Bacterial Canker), shown with ?demo=1
+    // Real MAF-Net output for a dataset photo (Bacterial Canker), shown with ?demo=1
     function demoResult() {
-        const order = ["Bacterial Canker", "Anthracnose", "Scab", "Stem End Rot", "Sooty Mould", "Powdery Mildew", "Healthy"];
-        const scores = [0.9538, 0.0138, 0.0092, 0.0081, 0.0064, 0.0051, 0.0036];
+        const order = ["Bacterial Canker", "Scab", "Anthracnose", "Stem End Rot", "Healthy", "Sooty Mould", "Powdery Mildew"];
+        const scores = [0.9209, 0.0167, 0.0148, 0.0125, 0.0121, 0.0117, 0.0113];
         return {
             demo: true,
             predicted_class: order[0],
@@ -293,7 +293,7 @@
             original_url: "/static/img/demo/photo.jpg",
             gradcam_url: "/static/img/demo/heat.jpg",
             marked_url: "/static/img/demo/marked.jpg",
-            affected_percent: 8.7
+            affected_percent: 11.2
         };
     }
 

@@ -18,7 +18,7 @@ Take one photo of an Amrapali mango. AmropaliNet checks that it is a mango, find
 (7 classes), marks the affected area with Grad-CAM and tells you what to do - in Bangla or English,
 with a PDF report. Detect early, spray less, waste less.
 
-- **Model:** AA-ENet (EfficientNet-B0 + CBAM + Transformer), trained on 3,500 Amrapali images
+- **Model:** MAF-Net (MobileNetV2 + Multi-Scale Fusion + Coordinate Attention, 2.4 M parameters, ensemble knowledge distillation), trained on 3,500 Amrapali images
 - **Library:** [`mango-disease-ai`](https://pypi.org/project/mango-disease-ai/) on PyPI - the website runs on its REST API
 - **Docs:** `docs/AmropaliNet_Documentation.pdf` (English + Bangla) · live API docs at `/docs`
 

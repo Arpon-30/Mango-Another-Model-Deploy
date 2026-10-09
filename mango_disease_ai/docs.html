@@ -764,7 +764,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:3rem 2re
             <div style="color:var(--red);font-size:.78rem;text-align:center;min-width:80px">❌ Not mango<br>→ HTTP 422</div>
           </div>
           <div class="arch-arrow">↓ ✅ Is mango</div>
-          <div class="arch-box" style="background:rgba(234,179,8,.1);border-color:rgba(234,179,8,.3)">🧠 AA-ENet Classification<div class="arch-label">EfficientNet-B0 + CBAM + Transformer</div></div>
+          <div class="arch-box" style="background:rgba(234,179,8,.1);border-color:rgba(234,179,8,.3)">🧠 MAF-Net Classification<div class="arch-label">MobileNetV2 + Multi-Scale Fusion + Coordinate Attention</div></div>
           <div class="arch-arrow">↓</div>
           <div class="arch-row">
             <div class="arch-box" style="background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3)">📊 Scores<div class="arch-label">7 class probabilities</div></div>
@@ -775,7 +775,7 @@ footer{background:var(--bg2);border-top:1px solid var(--border);padding:3rem 2re
         </div>
       </div>
       <div style="display:flex;flex-direction:column;gap:.9rem">
-        <div class="card"><div class="card-title">🧠 AA-ENet Model</div><div class="card-desc">Custom EfficientNet-B0 + CBAM + Transformer. Trained on Amropali mango dataset.</div><div class="tags"><span class="tag green">EfficientNet-B0</span><span class="tag blue">CBAM</span><span class="tag purple">Transformer</span></div></div>
+        <div class="card"><div class="card-title">🧠 MAF-Net Model</div><div class="card-desc">MobileNetV2 + Multi-Scale Fusion + Coordinate Attention, 2.4 M parameters, trained with ensemble knowledge distillation on the Amropali mango dataset.</div><div class="tags"><span class="tag green">MobileNetV2</span><span class="tag blue">Multi-Scale Fusion</span><span class="tag purple">Coordinate Attention</span></div></div>
         <div class="card"><div class="card-title">🔍 CLIP Validation</div><div class="card-desc">OpenAI CLIP (ViT-B/32) confirms the image is a mango before running diagnosis.</div><div class="tags"><span class="tag purple">CLIP ViT-B/32</span><span class="tag blue">Zero-shot</span></div></div>
         <div class="card"><div class="card-title">📦 Package Info v0.1.3</div><div class="card-desc">Self-contained: AI model, server, docs all bundled. Works from any folder.</div><div class="tags"><span class="tag green">PyPI</span><span class="tag blue">mango-api</span><span class="tag yellow">fpdf2</span></div></div>
       </div>

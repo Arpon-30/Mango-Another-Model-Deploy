@@ -70,8 +70,8 @@ class HealthResponse(BaseModel):
 
     status: str = Field(..., examples=["ok"])
     version: str = Field(..., examples=["0.2.0"])
-    model: str = Field("loading", description="AA-ENet status: loading / ok / error")
-    model_error: Optional[str] = Field(None, description="Why the AA-ENet model could not be loaded")
+    model: str = Field("loading", description="MAF-Net status: loading / ok / error")
+    model_error: Optional[str] = Field(None, description="Why the MAF-Net model could not be loaded")
     mango_check: str = Field("loading", description="CLIP mango checker status: loading / ok / error")
     mango_check_error: Optional[str] = Field(None, description="Why the CLIP mango checker could not be loaded")
 
@@ -118,16 +118,16 @@ def _load_mango_checker() -> None:
 
 
 def _warm_up() -> None:
-    """Load AA-ENet and CLIP in the background so the first request is fast."""
+    """Load MAF-Net and CLIP in the background so the first request is fast."""
     try:
         from mango_disease_ai.model import load_model
 
         load_model()
         _status.update(model="ok", model_error=None)
-        log.info("AA-ENet model loaded")
+        log.info("MAF-Net model loaded")
     except Exception as exc:
         _status.update(model="error", model_error=str(exc))
-        log.error("AA-ENet model NOT loaded: %s", exc)
+        log.error("MAF-Net model NOT loaded: %s", exc)
     try:
         _load_mango_checker()
         log.info("CLIP mango checker loaded")
@@ -171,7 +171,7 @@ def _read_upload(file: UploadFile) -> bytes:
 
 
 def _run_analysis(img_bytes: bytes, include_gradcam: bool = True) -> dict:
-    """Mango check (CLIP) -> AA-ENet -> Grad-CAM, with a clear error for each failure."""
+    """Mango check (CLIP) -> MAF-Net -> Grad-CAM, with a clear error for each failure."""
     from mango_disease_ai.model import ModelNotReadyError, resolve_model_path
 
     try:
@@ -259,7 +259,7 @@ WELCOME_HTML = """<!DOCTYPE html>
        Detect 7 diseases, mark the affected area and get PDF reports in English or Bangla.</p>
     <div class="install">pip install mango-disease-ai[api]<br>mango-api</div>
     <div class="badges">
-      <span class="badge">AA-ENet Model</span>
+      <span class="badge">MAF-Net Model</span>
       <span class="badge">CLIP Validation</span>
       <span class="badge">Grad-CAM++</span>
       <span class="badge">PDF Reports</span>
@@ -304,7 +304,7 @@ def create_app(web_root: str | Path | None = None) -> FastAPI:
             "- Grad-CAM heatmap and the likely affected area outlined\n"
             "- Symptoms and treatment\n"
             "- PDF report in English or Bangla\n\n"
-            "**Model**: AA-ENet (EfficientNet-B0 + CBAM + Transformer)  \n"
+            "**Model**: MAF-Net (MobileNetV2 + Multi-Scale Fusion + Coordinate Attention)  \n"
             "**Team**: AIUB Student Group (Arpon, Oni, Md. Ibtihazzaman), "
             "supervised by Dr. Md. Saef Ullah Miah"
         ),
@@ -355,7 +355,7 @@ def create_app(web_root: str | Path | None = None) -> FastAPI:
         include_gradcam: bool = Form(True, description="Include heatmap + marked area (slower). False = faster."),
     ):
         """
-        Mango check (CLIP) -> disease class (AA-ENet) -> Grad-CAM++ heatmap and marked
+        Mango check (CLIP) -> disease class (MAF-Net) -> Grad-CAM++ heatmap and marked
         affected area -> disease info. Error codes are listed in the module docstring.
         """
         return _run_analysis(_read_upload(image), include_gradcam=include_gradcam)

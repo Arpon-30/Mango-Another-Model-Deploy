@@ -42,7 +42,7 @@ def brand_html(theme: str = "dark") -> str:
             <div class="dash-brand__mark">🥭</div>
             <div>
               <h1>AmropaliNet</h1>
-              <p>Amrapali mango disease classification · AA-ENet + CLIP</p>
+              <p>Amrapali mango disease classification · MAF-Net + CLIP</p>
             </div>
           </div>
           <div class="dash-brand__right">
@@ -323,8 +323,8 @@ def footer_html() -> str:
         """
         <div class="dash-footer">
           <p class="dash-footer__title">🥭 MangoAI</p>
-          <p class="dash-footer__line">Amrapali Mango Disease Detection · AA-ENet Model</p>
-          <p class="dash-footer__line">AA-ENet Model developed by AIUB R&amp;D Club</p>
+          <p class="dash-footer__line">Amrapali Mango Disease Detection · MAF-Net Model</p>
+          <p class="dash-footer__line">MAF-Net Model developed by AIUB R&amp;D Club</p>
           <p class="dash-footer__line">(Arpon, Oni, Md. Ibtihazzaman) Group · Supervised by Dr. Md. Saef Ullah Miah</p>
           <p class="dash-footer__disclaimer">
             ⚠️ For research and educational purposes only. Always consult a qualified agronomist for crop management decisions.
