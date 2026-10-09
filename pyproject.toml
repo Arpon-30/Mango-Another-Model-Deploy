@@ -21,7 +21,8 @@ keywords = [
     "deep-learning",
     "plant-disease",
     "grad-cam",
-    "efficientnet",
+    "mobilenetv2",
+    "maf-net",
     "agriculture",
     "amropali",
 ]

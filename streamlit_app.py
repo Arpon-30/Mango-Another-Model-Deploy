@@ -103,7 +103,7 @@ def api():
     from mango_disease_ai.server import create_app
 
     client = TestClient(create_app(), raise_server_exceptions=False)
-    client.__enter__()  # runs the lifespan: loads AA-ENet + the mango checker in the background
+    client.__enter__()  # runs the lifespan: loads MAF-Net + the mango checker in the background
     return client
 
 

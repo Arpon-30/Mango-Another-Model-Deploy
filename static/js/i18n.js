@@ -78,7 +78,7 @@ window.MANGO_I18N = {
         "st.clip": "The mango checker is not loaded",
         "st.offline": "Cannot reach the AI server",
         "st.offlined": "Start it with run.py, then reload this page.",
-        "err.model": "The AI model file is missing. Put the 18 MB AA-ENet_proposed.pt in the project folder and restart.",
+        "err.model": "The AI model file is missing. Put the 10 MB MAF-Net_final_weights.pt in the project folder and restart.",
         "err.clip": "The mango checker could not load. Connect to the internet once and try again.",
         "res.risk": "Garden risk",
 
@@ -276,7 +276,7 @@ window.MANGO_I18N = {
         "st.clip": "আম যাচাইকারী লোড হয়নি",
         "st.offline": "এআই সার্ভারে সংযোগ হচ্ছে না",
         "st.offlined": "run.py দিয়ে চালু করে পেজটি আবার লোড করুন।",
-        "err.model": "এআই মডেল ফাইল নেই। ১৮ MB এর AA-ENet_proposed.pt ফাইলটি প্রজেক্ট ফোল্ডারে রেখে আবার চালু করুন।",
+        "err.model": "এআই মডেল ফাইল নেই। ১০ MB এর MAF-Net_final_weights.pt ফাইলটি প্রজেক্ট ফোল্ডারে রেখে আবার চালু করুন।",
         "err.clip": "আম যাচাইকারী লোড হয়নি। একবার ইন্টারনেটে যুক্ত হয়ে আবার চেষ্টা করুন।",
         "res.risk": "বাগানের ঝুঁকি",
 

@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-**AmropaliNet** is a web-based AI system for classifying 7 Amropali mango fruit diseases using the **AA-ENet** model (EfficientNet-B0 + CBAM attention + Transformer encoder). The system provides:
+**AmropaliNet** is a web-based AI system for classifying 7 Amropali mango fruit diseases using the **MAF-Net** model (MobileNetV2 + Multi-Scale Fusion + Coordinate Attention, trained with ensemble knowledge distillation). The system provides:
 
 - Real-time disease classification with confidence scores
 - Grad-CAM visualization showing which regions contributed to the prediction
@@ -15,8 +15,10 @@
 
 ### Backend Stack
 - **Framework**: Flask 3.0+
-- **ML**: PyTorch 2.0+, TIMM (EfficientNet, Transformer)
-- **Model**: AA-ENet (~5.8M parameters)
+- **ML**: PyTorch 2.0+, TIMM (MobileNetV2 backbone)
+- **Model**: MAF-Net (~2.4M parameters; source notebook `MAF-Net_Mango_2026_1.ipynb`, CV mean accuracy ~94.9%, hold-out 94.3%)
+- **Input**: RGB -> 256x256 bicubic -> 224x224 bilinear (antialiased), in [0, 1]; the model normalises itself (`Normalized` wrapper, state_dict keys `net.*`, `mean`, `std`)
+- **Confidence**: trained with label smoothing 0.1, so top scores stay below ~0.93
 - **Inference**: CPU-optimized with CLIP for mango detection
 - **Reporting**: FPDF2 for PDF generation
 - **Deployment**: Docker (CPU-only for HF Spaces)
@@ -30,14 +32,14 @@
 - **Calls**: `POST /api/analyze`, `POST /api/report`
 - **Features**: camera capture, in-browser resize, EN/BN toggle (`mangoai-lang`), light/dark toggle (`mangoai-theme`), garden spread animation, encyclopedia detail sheet, `?demo=1` sample result
 - **Writing rule**: never use long dashes in UI text; use a single hyphen
-- **Photos**: `static/img/diseases/*.jpg` are real dataset photos (encyclopedia cards); `static/img/demo/*.jpg` are real AA-ENet outputs (used by `?demo=1`)
-- **Model file**: `mango_disease_ai/AA-ENet_proposed.pt` is committed as a normal file (not Git LFS) so GitHub ZIP downloads and the PyPI wheel include the real 18 MB weights
+- **Photos**: `static/img/diseases/*.jpg` are real dataset photos (encyclopedia cards); `static/img/demo/*.jpg` are real MAF-Net outputs (used by `?demo=1`)
+- **Model file**: `mango_disease_ai/MAF-Net_final_weights.pt` is committed as a normal file (not Git LFS) so GitHub ZIP downloads and the PyPI wheel include the real 10 MB weights. Root `model.py` / `inference.py` only re-export `mango_disease_ai`
 - **run.py**: auto-installs small missing packages (uharfbuzz, fastapi, uvicorn, python-multipart, fpdf2) before starting
 - **Developers section**: `#developers` on the page - pip install, Python / REST / JavaScript examples with copy button
 - **Grad-CAM marking**: `analyze()` also returns `marked_base64` (likely affected area outlined, Grad-CAM >= 0.55) and `affected_percent`; not produced for Healthy
 - **PDF**: `mango_disease_ai/report_engine.py` - one A4 page in English or Bangla (`/api/report` form field `lang=en|bn`). Bangla uses the bundled Hind Siliguri font (`mango_disease_ai/fonts`, OFL) and needs `uharfbuzz`; Bangla disease text comes from `mango_disease_ai/disease_info_bn.json` (exported from `static/js/diseases.js`). Lines are wrapped manually - fpdf2's multi_cell mis-shapes wrapped Bangla lines
 - **Browser translation**: `<html translate="no">` + `<meta name="google" content="notranslate">` - Chrome/Edge auto-translate otherwise turns the Bangla UI back into machine English
-- **Mango check**: 18 CLIP labels (4 mango, 14 not-mango, threshold 50%) plus a second gate in `core.analyze()`: CLIP < 80% and AA-ENet < 60% -> not a mango
+- **Mango check**: 18 CLIP labels (4 mango, 14 not-mango, threshold 50%) plus a second gate in `core.analyze()`: CLIP < 80% and MAF-Net < 45% -> not a mango
 - **Streamlit Cloud**: `streamlit_app.py` copies `templates/index.html` + `static/` to a temp folder, serves it full screen as a Streamlit component, and `static/js/streamlit_bridge.js` routes the page's `fetch("/api/...")` to Python (library API via FastAPI TestClient). Keep the website unchanged; `MANGO_LOW_MEMORY=1` keeps it under ~1 GB
 - **Team**: AIUB Student Group (Arpon, Oni, Md. Ibtihazzaman), supervised by Dr. Md. Saef Ullah Miah - arponamit.55@gmail.com
 - **Docs**: `docs/HACKATHON_BUILD_PROMPT.md`, `docs/HACKATHON_PLAN.md`
@@ -45,7 +47,7 @@
 ### Key Files
 ```
 ├── app.py              # Flask server, API routes, startup
-├── model.py            # AA-ENet architecture, CBAM, model loading
+├── model.py            # re-exports mango_disease_ai.model (MAF-Net)
 ├── inference.py        # Classification, Grad-CAM, mango detection (CLIP)
 ├── report.py           # PDF report generation with branding
 ├── Dockerfile          # Multi-stage build, CPU PyTorch
@@ -60,7 +62,7 @@
 ```
 
 ### Model Files
-- `AA-ENet_proposed.pt` (18 MB) — Trained model weights
+- `mango_disease_ai/MAF-Net_final_weights.pt` (10 MB) — Trained MAF-Net weights
 - `fruit_classifier.pth` (43 MB) — Legacy classifier (unused, can be removed)
 
 ## API Endpoints
@@ -161,7 +163,7 @@ None required for basic operation. For production:
 - Top-1 prediction returned with all class scores
 
 ### Grad-CAM
-- Targets `model.reduce` layer (after backbone, before Transformer)
+- Grad-CAM++ on `model.net.backbone.bn2` (last MobileNetV2 feature map, 7x7; the Coordinate Attention branch gave scattered maps)
 - Resized to input image dimensions
 - Blended 55% original + 45% heatmap for visualization
 - Returned as base64 PNG
@@ -227,7 +229,7 @@ None required for basic operation. For production:
 
 ### Inference Time (Typical)
 - Mango detection: ~0.5–1s (CLIP)
-- Classification: ~0.2–0.5s (AA-ENet)
+- Classification: ~0.05–0.2s (MAF-Net, ~11 ms model time on CPU)
 - Grad-CAM: ~0.3–0.8s (backward pass required)
 - **Total: ~1–2 seconds** (acceptable for user experience)
 
@@ -250,8 +252,8 @@ pytest tests/  # (not currently in repo)
 ## Troubleshooting
 
 ### Model Loading Fails
-- Ensure `AA-ENet_proposed.pt` exists in project root
-- Check file size (should be ~18 MB)
+- Ensure `mango_disease_ai/MAF-Net_final_weights.pt` exists
+- Check file size (should be ~10 MB)
 - Verify GPU/CPU match in code vs. machine
 
 ### CLIP Download Fails
@@ -301,12 +303,12 @@ git lfs pull  # Download large files
 ```
 
 Model files in `.gitattributes`:
-- `*.pt` (AA-ENet weights)
+- `*.pt` (not used: MAF-Net weights are a normal file)
 - `*.pth` (legacy classifier)
 
 ## Deployment Checklist
 
-- [ ] Model file (AA-ENet_proposed.pt) present and accessible
+- [ ] Model file (mango_disease_ai/MAF-Net_final_weights.pt) present and accessible
 - [ ] All dependencies in requirements.txt and pinned
 - [ ] Docker build succeeds without errors
 - [ ] Flask app starts with `docker run`
@@ -325,7 +327,7 @@ Model files in `.gitattributes`:
 ## Support & Attribution
 
 **Research Group**: AIUB R&D ICCA Research Group  
-**Model**: AA-ENet (EfficientNet-B0 + CBAM + Transformer)  
+**Model**: MAF-Net (MobileNetV2 + Multi-Scale Fusion + Coordinate Attention)  
 **Dataset**: 3,500 Amropali mango images (500 per disease class)  
 **Deployment**: Hugging Face Spaces  
 **License**: MIT

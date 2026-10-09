@@ -6,7 +6,7 @@
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-`mango-disease-ai` is the engine behind **AmropaliNet**, a web app that helps Bangladeshi mango farmers detect disease from one photo. It runs the **AA-ENet** model (EfficientNet-B0 + CBAM + Transformer, trained on 3,500 Amrapali images) and ships the trained weights inside the package.
+`mango-disease-ai` is the engine behind **AmropaliNet**, a web app that helps Bangladeshi mango farmers detect disease from one photo. It runs the **MAF-Net** model (MobileNetV2 + Multi-Scale Fusion + Coordinate Attention, 2.4 M parameters, trained on 3,500 Amrapali images) and ships the trained weights inside the package.
 
 | Feature | |
 |---|---|

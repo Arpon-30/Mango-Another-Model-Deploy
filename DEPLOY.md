@@ -88,14 +88,14 @@ Sign up at https://huggingface.co/join, verify your email, and subscribe to **PR
    | `Dockerfile` | How to build the app |
    | `README.md` | Tells Hugging Face: Docker, port 7860 (replace the default README) |
    | `api/` | Website server |
-   | `mango_disease_ai/` | AI library + the 18 MB model + Bangla fonts |
+   | `mango_disease_ai/` | AI library + the 10 MB MAF-Net model + Bangla fonts |
    | `templates/` | Web page |
    | `static/` | Design, scripts, images |
 
    You do **not** need the notebook, `docs/`, or the old Streamlit files.
 3. Write a commit message like `First deploy` and click **Commit changes to main**.
 
-Large files (the 18 MB model, fonts) are handled automatically by the web upload.
+Large files (the 10 MB model, fonts) are handled automatically by the web upload.
 
 ## Step 4 - Wait for the build
 - The **Logs** tab shows the build. The first build takes about **10-15 minutes**
