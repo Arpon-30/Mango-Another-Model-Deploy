@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light" translate="no" class="notranslate">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="google" content="notranslate" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>AmropaliNet - Mango Disease Doctor</title>
+    <meta name="description" content="Take one photo of an Amrapali mango. AmropaliNet finds 7 diseases in seconds, shows how they spread in the garden and tells farmers exactly what to do - in Bangla and English." />
+    <meta name="theme-color" content="#2E7D32" />
+    <meta property="og:title" content="AmropaliNet - Healthy mangoes, greener gardens" />
+    <meta property="og:description" content="AI mango disease detection for the mango farmers of Bangladesh - in Bangla and English." />
+    <link rel="icon" href="/static/img/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <script>
+        /* Apply saved theme and language before first paint (no flash) */
+        (function () {
+            try {
+                var t = localStorage.getItem("mangoai-theme");
+                var l = localStorage.getItem("mangoai-lang");
+                if (t === "dark" || t === "light") document.documentElement.setAttribute("data-theme", t);
+                if (l === "bn" || l === "en") document.documentElement.setAttribute("lang", l);
+            } catch (e) {}
+        })();
+    </script>
+    <script src="/static/js/i18n.js" defer></script>
+    <script src="/static/js/diseases.js" defer></script>
+    <script src="/static/js/main.js" defer></script>
+</head>
+<body>
+    <a class="skip-link" href="#detect" data-i18n="skip">Skip to scanner</a>
+
+    <!-- Heritage ticker: always visible -->
+    <div class="ticker" aria-label="Amrapali mango heritage">
+        <div class="ticker__track" id="ticker-track">
+            <span class="ticker__item" data-i18n="ticker.1"></span>
+            <span class="ticker__item" data-i18n="ticker.2"></span>
+            <span class="ticker__item" data-i18n="ticker.3"></span>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="header__inner container">
+            <a class="brand" href="#home" aria-label="AmropaliNet home">
+                <svg class="brand__logo" viewBox="0 0 48 48" aria-hidden="true">
+                    <path d="M24 9c-3-5-9-6-13-4 3 2 6 4 9 7" fill="#43A047"/>
+                    <path d="M25 11c9 0 16 8 16 18 0 9-7 14-15 14S8 38 8 29c0-10 8-18 17-18z" fill="url(#lg-mango)"/>
+                    <path d="M18 22c2-3 5-4 8-4" stroke="#fff" stroke-width="2.5" stroke-linecap="round" fill="none" opacity=".7"/>
+                    <defs><linearGradient id="lg-mango" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFD54F"/><stop offset="1" stop-color="#FB8C00"/></linearGradient></defs>
+                </svg>
+                <span class="brand__name">Amropali<span>Net</span></span>
+            </a>
+
+            <nav class="nav" id="nav" aria-label="Main">
+                <a class="nav__link" href="#home" data-i18n="nav.home"></a>
+                <a class="nav__link" href="#detect" data-i18n="nav.detect"></a>
+                <a class="nav__link" href="#garden" data-i18n="nav.garden"></a>
+                <a class="nav__link" href="#diseases" data-i18n="nav.diseases"></a>
+                <a class="nav__link" href="#impact" data-i18n="nav.impact"></a>
+                <a class="nav__link" href="#how" data-i18n="nav.how"></a>
+                <a class="nav__link" href="#developers" data-i18n="nav.dev"></a>
+            </nav>
+
+            <div class="controls">
+                <div class="seg" role="group" data-i18n-attr="aria-label:ctl.lang">
+                    <button class="seg__btn" type="button" data-lang="en" lang="en">EN</button>
+                    <button class="seg__btn" type="button" data-lang="bn" lang="bn">বাংলা</button>
+                </div>
+                <div class="seg" role="group" data-i18n-attr="aria-label:ctl.theme">
+                    <button class="seg__btn seg__btn--icon" type="button" data-theme-set="light" data-i18n-attr="title:ctl.light;aria-label:ctl.light">☀️</button>
+                    <button class="seg__btn seg__btn--icon" type="button" data-theme-set="dark" data-i18n-attr="title:ctl.dark;aria-label:ctl.dark">🌙</button>
+                </div>
+                <button class="menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="nav" data-i18n-attr="aria-label:nav.menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- ============ HERO ============ -->
+        <section class="hero" id="home">
+            <div class="leaves" aria-hidden="true">
+                <i></i><i></i><i></i><i></i><i></i><i></i>
+            </div>
+            <div class="container hero__grid">
+                <div class="hero__text">
+                    <span class="badge-eco" data-i18n="hero.badge"></span>
+                    <h1 class="hero__title">
+                        <span data-i18n="hero.title1"></span>
+                        <span class="hero__title-accent" data-i18n="hero.title2"></span>
+                    </h1>
+                    <p class="hero__sub" data-i18n="hero.sub"></p>
+                    <div class="hero__cta">
+                        <button class="btn btn--mango btn--lg" type="button" data-action="camera">
+                            <span aria-hidden="true">📷</span><span data-i18n="hero.camera"></span>
+                        </button>
+                        <button class="btn btn--primary btn--lg" type="button" data-action="gallery">
+                            <span aria-hidden="true">🖼️</span><span data-i18n="hero.upload"></span>
+                        </button>
+                    </div>
+                    <ul class="chips">
+                        <li class="chip">🥭 <span data-i18n="hero.chip1"></span></li>
+                        <li class="chip">📱 <span data-i18n="hero.chip2"></span></li>
+                        <li class="chip">🗣️ <span data-i18n="hero.chip3"></span></li>
+                        <li class="chip">📄 <span data-i18n="hero.chip4"></span></li>
+                    </ul>
+                </div>
+
+                <!-- Animated orchard scene -->
+                <div class="hero__art" aria-hidden="true">
+                    <svg class="scene" viewBox="0 0 520 440">
+                        <defs>
+                            <radialGradient id="g-sky" cx="50%" cy="40%" r="60%">
+                                <stop offset="0" stop-color="var(--sky-1)"/>
+                                <stop offset="1" stop-color="var(--sky-2)"/>
+                            </radialGradient>
+                            <radialGradient id="g-sun" cx="50%" cy="50%" r="50%">
+                                <stop offset="0" stop-color="#FFE082"/>
+                                <stop offset=".45" stop-color="#FFCA28"/>
+                                <stop offset="1" stop-color="#FFCA28" stop-opacity="0"/>
+                            </radialGradient>
+                            <radialGradient id="g-crown" cx="35%" cy="30%" r="75%">
+                                <stop offset="0" stop-color="#8BC34A"/>
+                                <stop offset=".5" stop-color="#4E9A31"/>
+                                <stop offset="1" stop-color="#2C5F1E"/>
+                            </radialGradient>
+                            <radialGradient id="g-crown-2" cx="40%" cy="30%" r="70%">
+                                <stop offset="0" stop-color="#7CB342"/>
+                                <stop offset="1" stop-color="#33702A"/>
+                            </radialGradient>
+                            <linearGradient id="g-trunk" x1="0" y1="0" x2="1" y2="0">
+                                <stop offset="0" stop-color="#5D3B24"/>
+                                <stop offset=".45" stop-color="#8A5C3C"/>
+                                <stop offset="1" stop-color="#4E3120"/>
+                            </linearGradient>
+                            <linearGradient id="g-mango" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0" stop-color="#E6EE9C"/>
+                                <stop offset=".35" stop-color="#FFD54F"/>
+                                <stop offset=".75" stop-color="#FFA726"/>
+                                <stop offset="1" stop-color="#E65100"/>
+                            </linearGradient>
+                            <linearGradient id="g-hill-1" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0" stop-color="var(--hill-1)"/>
+                                <stop offset="1" stop-color="var(--hill-3)"/>
+                            </linearGradient>
+                            <linearGradient id="g-kurta" x1="0" y1="0" x2="1" y2="0">
+                                <stop offset="0" stop-color="#E9E9E1"/>
+                                <stop offset=".5" stop-color="#FAFAF5"/>
+                                <stop offset="1" stop-color="#D9D9CF"/>
+                            </linearGradient>
+                            <linearGradient id="g-skin" x1="0" y1="0" x2="1" y2="1">
+                                <stop offset="0" stop-color="#B57A55"/>
+                                <stop offset="1" stop-color="#8C5A3C"/>
+                            </linearGradient>
+                            <pattern id="p-lungi" width="8" height="8" patternUnits="userSpaceOnUse">
+                                <rect width="8" height="8" fill="#2E7D32"/>
+                                <path d="M0 4 H8 M4 0 V8" stroke="#1B5E20" stroke-width="1.4"/>
+                            </pattern>
+                            <clipPath id="clip-land"><circle cx="260" cy="220" r="210"/></clipPath>
+                        </defs>
+                        <circle cx="260" cy="220" r="210" fill="url(#g-sky)"/>
+
+                        <g class="sun">
+                            <circle cx="410" cy="95" r="58" fill="url(#g-sun)" opacity=".55"/>
+                            <circle cx="410" cy="95" r="26" fill="#FFCA28"/>
+                            <g class="sun__rays" stroke="#FFD54F" stroke-width="3" stroke-linecap="round" opacity=".7">
+                                <line x1="410" y1="50" x2="410" y2="38"/><line x1="410" y1="140" x2="410" y2="152"/>
+                                <line x1="365" y1="95" x2="353" y2="95"/><line x1="455" y1="95" x2="467" y2="95"/>
+                                <line x1="378" y1="63" x2="370" y2="55"/><line x1="442" y1="127" x2="450" y2="135"/>
+                                <line x1="442" y1="63" x2="450" y2="55"/><line x1="378" y1="127" x2="370" y2="135"/>
+                            </g>
+                        </g>
+
+                        <g class="cloud cloud--a" fill="var(--cloud)" opacity=".9">
+                            <ellipse cx="120" cy="90" rx="38" ry="14"/><ellipse cx="146" cy="82" rx="24" ry="16"/><ellipse cx="98" cy="85" rx="20" ry="12"/>
+                        </g>
+                        <g class="cloud cloud--b" fill="var(--cloud)" opacity=".8">
+                            <ellipse cx="300" cy="60" rx="30" ry="10"/><ellipse cx="318" cy="54" rx="18" ry="12"/>
+                        </g>
+
+                        <g class="birds" stroke="var(--ink-soft)" stroke-width="2" fill="none" stroke-linecap="round" opacity=".75">
+                            <path d="M200 120q6-5 12 0q6-5 12 0"/><path d="M232 104q5-4 10 0q5-4 10 0"/>
+                        </g>
+
+                        <!-- hills and grass -->
+                        <g clip-path="url(#clip-land)">
+                            <path d="M40 360 Q150 300 270 340 T500 330 L500 440 L40 440Z" fill="var(--hill-2)"/>
+                            <path d="M20 380 Q140 340 260 368 T510 360 L510 440 L20 440Z" fill="url(#g-hill-1)"/>
+                            <path d="M409 392 q1.9 -6.3 3.1 -12.5 M137 392 q-1.2 -5.1 -1.8 -10.1 M44 392 q-1.8 -3.1 -2.8 -6.2 M152 392 q3.7 -5.8 5.8 -11.5 M240 392 q3.9 -6.7 6.2 -13.5 M479 392 q-2.2 -4.5 -3.6 -8.9 M137 392 q-2.4 -3.8 -3.8 -7.6 M323 392 q2.7 -6.6 4.4 -13.2 M255 392 q2.4 -5.6 3.8 -11.2 M70 392 q3.3 -5.6 5.2 -11.3 M398 392 q-0.2 -6.0 -0.3 -12.0 M114 392 q-1.3 -6.2 -2.1 -12.3 M406 392 q-0.8 -6.9 -1.3 -13.8 M219 392 q1.8 -6.8 2.9 -13.6 M110 392 q-2.8 -3.5 -4.5 -7.0 M455 392 q-2.8 -6.2 -4.5 -12.5 M418 392 q1.3 -6.9 2.0 -13.8 M195 392 q-3.0 -5.2 -4.7 -10.4 M37 392 q1.2 -6.9 1.9 -13.8 M277 392 q-0.5 -6.7 -0.8 -13.5 M440 392 q-2.3 -6.3 -3.7 -12.6 M148 392 q-2.1 -4.2 -3.3 -8.3 M306 392 q-0.6 -4.0 -1.0 -8.1 M92 392 q-1.2 -6.6 -1.9 -13.3 M245 392 q3.2 -5.3 5.2 -10.7 M228 392 q0.0 -6.7 0.0 -13.3 M280 392 q-3.9 -5.1 -6.2 -10.2 M237 392 q-4.0 -3.7 -6.3 -7.5 M406 392 q-0.2 -3.7 -0.3 -7.4 M371 392 q-1.4 -5.2 -2.2 -10.5 M274 392 q2.3 -5.2 3.6 -10.4 M80 392 q-2.0 -5.2 -3.2 -10.5 M160 392 q0.1 -6.1 0.1 -12.2 M294 392 q3.3 -6.0 5.3 -12.1 M238 392 q0.0 -5.5 0.1 -10.9 M271 392 q-0.4 -5.8 -0.6 -11.5 M281 392 q3.5 -4.9 5.7 -9.8 M359 392 q3.5 -6.5 5.7 -13.0 M152 392 q3.5 -5.2 5.7 -10.5 M425 392 q-3.0 -3.5 -4.8 -7.1 M238 392 q-2.1 -3.3 -3.3 -6.6 M64 392 q2.3 -5.7 3.6 -11.4 M452 392 q1.7 -3.6 2.8 -7.2 M340 392 q3.1 -3.6 4.9 -7.1 M485 392 q3.6 -3.9 5.8 -7.8 M217 392 q3.9 -4.9 6.3 -9.9 M421 392 q-0.5 -3.6 -0.9 -7.3 M272 392 q-2.4 -4.4 -3.9 -8.7 M180 392 q-3.8 -5.9 -6.2 -11.8 M290 392 q-3.9 -4.8 -6.2 -9.5 M186 392 q0.1 -5.5 0.2 -11.0 M60 392 q2.3 -6.9 3.7 -13.9 M487 392 q-1.9 -3.4 -3.0 -6.8 M49 392 q-1.8 -6.1 -2.9 -12.2 M91 392 q3.3 -4.7 5.3 -9.4 M415 392 q-2.8 -4.0 -4.5 -8.1 M462 392 q1.6 -5.3 2.6 -10.6 M72 392 q1.5 -3.2 2.4 -6.5 M230 392 q3.5 -3.3 5.6 -6.6 M328 392 q-3.3 -6.2 -5.3 -12.4" stroke="var(--hill-3)" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".8"/>
+                            <ellipse cx="268" cy="372" rx="70" ry="9" fill="#000" opacity=".12"/>
+                        </g>
+
+                        <!-- mango tree -->
+                        <g class="tree">
+                            <path d="M258 372 C254 320 262 285 250 248 L272 248 C272 285 278 322 284 372 Q271 378 258 372Z" fill="url(#g-trunk)"/>
+                            <path d="M264 360 C262 330 266 300 260 270 M274 352 C272 320 276 300 270 276" stroke="#4A2E1C" stroke-width="1.4" fill="none" opacity=".6"/>
+                            <path d="M262 292 C245 276 232 262 222 240" stroke="url(#g-trunk)" stroke-width="9" fill="none" stroke-linecap="round"/>
+                            <path d="M272 286 C290 271 300 258 308 238" stroke="url(#g-trunk)" stroke-width="9" fill="none" stroke-linecap="round"/>
+                            <g class="tree__crown">
+                                <circle cx="262" cy="190" r="80" fill="url(#g-crown)"/>
+                                <circle cx="205" cy="216" r="52" fill="url(#g-crown-2)"/>
+                                <circle cx="320" cy="212" r="54" fill="url(#g-crown-2)"/>
+                                <circle cx="240" cy="150" r="46" fill="url(#g-crown)"/>
+                                <circle cx="295" cy="160" r="42" fill="url(#g-crown)"/>
+                                <circle cx="262" cy="238" r="48" fill="url(#g-crown-2)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#2E6B22" transform="translate(231 239) rotate(129)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#2A5E1F" transform="translate(291 146) rotate(302)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#3C8A2E" transform="translate(276 241) rotate(71)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#2E6B22" transform="translate(330 226) rotate(59)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#2E6B22" transform="translate(348 169) rotate(348)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#2E6B22" transform="translate(191 163) rotate(246)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#2A5E1F" transform="translate(199 174) rotate(194)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#3C8A2E" transform="translate(318 231) rotate(68)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#2E6B22" transform="translate(332 233) rotate(12)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#3C8A2E" transform="translate(200 177) rotate(162)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#5FAE3F" transform="translate(176 193) rotate(201)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#3C8A2E" transform="translate(191 160) rotate(195)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#2A5E1F" transform="translate(239 139) rotate(258)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#2A5E1F" transform="translate(185 194) rotate(174)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#4F9E36" transform="translate(329 186) rotate(346)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#2E6B22" transform="translate(311 245) rotate(18)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#4F9E36" transform="translate(270 125) rotate(305)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#5FAE3F" transform="translate(220 242) rotate(122)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#2E6B22" transform="translate(322 213) rotate(6)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#5FAE3F" transform="translate(349 219) rotate(34)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#2E6B22" transform="translate(245 251) rotate(116)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#5FAE3F" transform="translate(335 170) rotate(348)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#3C8A2E" transform="translate(352 219) rotate(-8)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#3C8A2E" transform="translate(179 240) rotate(143)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#5FAE3F" transform="translate(180 213) rotate(192)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#4F9E36" transform="translate(311 149) rotate(304)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#2E6B22" transform="translate(230 137) rotate(224)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#5FAE3F" transform="translate(294 242) rotate(42)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#3C8A2E" transform="translate(296 145) rotate(282)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#3C8A2E" transform="translate(193 221) rotate(156)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#2E6B22" transform="translate(231 131) rotate(258)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#2A5E1F" transform="translate(164 213) rotate(201)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#5FAE3F" transform="translate(200 230) rotate(110)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#3C8A2E" transform="translate(322 211) rotate(-1)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#2A5E1F" transform="translate(331 236) rotate(8)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#2E6B22" transform="translate(301 233) rotate(44)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#4F9E36" transform="translate(326 215) rotate(15)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#2E6B22" transform="translate(348 173) rotate(342)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#5FAE3F" transform="translate(324 125) rotate(303)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#4F9E36" transform="translate(236 240) rotate(132)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#3C8A2E" transform="translate(169 202) rotate(174)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#2A5E1F" transform="translate(344 172) rotate(314)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#2E6B22" transform="translate(345 154) rotate(313)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#3C8A2E" transform="translate(238 139) rotate(240)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#2A5E1F" transform="translate(218 235) rotate(131)"/>
+                                <path d="M0 0 C6 -5 18 -5 26 0 C18 5 6 5 0 0Z" fill="#3C8A2E" transform="translate(228 240) rotate(144)"/>
+                            </g>
+                            <g class="fruits">
+                                <g class="fruit"><path d="M215 218 v6" stroke="#4E6B2A" stroke-width="2"/><path d="M215 224 C225 224 229 240 225 250 C221 260 207 258 206 246 C205 234 207 224 215 224Z" fill="url(#g-mango)"/><ellipse cx="211" cy="233" rx="2.5" ry="5" fill="#fff" opacity=".45"/></g>
+                                <g class="fruit"><path d="M252 188 v6" stroke="#4E6B2A" stroke-width="2"/><path d="M252 194 C262 194 266 210 262 220 C258 230 244 228 243 216 C242 204 244 194 252 194Z" fill="url(#g-mango)"/><ellipse cx="248" cy="203" rx="2.5" ry="5" fill="#fff" opacity=".45"/></g>
+                                <g class="fruit"><path d="M300 221 v6" stroke="#4E6B2A" stroke-width="2"/><path d="M300 227 C310 227 314 243 310 253 C306 263 292 261 291 249 C290 237 292 227 300 227Z" fill="url(#g-mango)"/><ellipse cx="296" cy="236" rx="2.5" ry="5" fill="#fff" opacity=".45"/></g>
+                                <g class="fruit"><path d="M330 184 v6" stroke="#4E6B2A" stroke-width="2"/><path d="M330 190 C339 190 343 205 339 214 C335 223 322 221 321 210 C320 199 322 190 330 190Z" fill="url(#g-mango)"/><ellipse cx="326" cy="198" rx="2.2" ry="4.5" fill="#fff" opacity=".45"/></g>
+                                <g class="fruit"><path d="M275 149 v6" stroke="#4E6B2A" stroke-width="2"/><path d="M275 155 C284 155 288 170 284 179 C280 188 267 186 266 175 C265 164 267 155 275 155Z" fill="url(#g-mango)"/><ellipse cx="271" cy="163" rx="2.2" ry="4.5" fill="#fff" opacity=".45"/></g>
+                                <g class="fruit"><path d="M195 174 v6" stroke="#4E6B2A" stroke-width="2"/><path d="M195 180 C204 180 208 195 204 204 C200 213 187 211 186 200 C185 189 187 180 195 180Z" fill="url(#g-mango)"/><ellipse cx="191" cy="188" rx="2.2" ry="4.5" fill="#fff" opacity=".45"/></g>
+                            </g>
+                        </g>
+
+                        <!-- farmer -->
+                        <g class="farmer">
+                            <ellipse cx="118" cy="392" rx="34" ry="6" fill="#000" opacity=".15"/>
+                            <rect x="104" y="345" width="11" height="45" rx="5" fill="url(#g-skin)"/>
+                            <rect x="122" y="345" width="11" height="45" rx="5" fill="url(#g-skin)"/>
+                            <path d="M98 318 h42 l6 46 h-54z" fill="url(#p-lungi)"/>
+                            <path d="M98 318 h42" stroke="#1B5E20" stroke-width="3"/>
+                            <path d="M100 270 q18-8 38 0 l4 52 h-46z" fill="url(#g-kurta)"/>
+                            <path d="M118 272 v48" stroke="#CFCFC4" stroke-width="1.6"/>
+                            <path d="M112 272 q7 10 14 0" stroke="#CFCFC4" stroke-width="1.6" fill="none"/>
+                            <g class="farmer__arm">
+                                <path d="M137 276 q18 -8 26 -30" stroke="url(#g-kurta)" stroke-width="11" stroke-linecap="round" fill="none"/>
+                                <circle cx="164" cy="243" r="6.5" fill="url(#g-skin)"/>
+                            </g>
+                            <path d="M101 278 q-12 18 -6 40" stroke="url(#g-kurta)" stroke-width="11" stroke-linecap="round" fill="none"/>
+                            <circle cx="96" cy="322" r="6" fill="url(#g-skin)"/>
+                            <path d="M78 322 h38 l-5 22 h-28z" fill="#C8A165"/>
+                            <path d="M79 327 h36 M80 333 h34 M82 339 h30" stroke="#A7803F" stroke-width="1.4"/>
+                            <path d="M86 312 C92 312 94 320 91 324 C88 328 82 326 82 321 C82 316 83 312 86 312Z" fill="url(#g-mango)"/>
+                            <path d="M100 310 C106 310 108 318 105 322 C102 326 96 324 96 319 C96 314 97 310 100 310Z" fill="url(#g-mango)"/>
+                            <path d="M111 314 C116 314 118 321 115 324 C112 327 107 325 107 321 C107 317 108 314 111 314Z" fill="url(#g-mango)"/>
+                            <rect x="113" y="252" width="12" height="14" rx="4" fill="url(#g-skin)"/>
+                            <circle cx="119" cy="243" r="15" fill="url(#g-skin)"/>
+                            <path d="M106 250 q13 12 26 0 q-2 10 -13 12 q-11 -2 -13 -12z" fill="#3E2723" opacity=".85"/>
+                            <circle cx="113" cy="241" r="1.6" fill="#2B1B14"/><circle cx="125" cy="241" r="1.6" fill="#2B1B14"/>
+                            <path d="M84 232 L119 208 L154 232 Q119 241 84 232Z" fill="#CFA14A"/>
+                            <path d="M92 229 L119 211 L146 229 M104 231 L119 214 L134 231" stroke="#A67C2E" stroke-width="1.4" fill="none"/>
+                        </g>
+
+                        <!-- sprout -->
+                        <g class="sprout">
+                            <path d="M430 388 v-26" stroke="#388E3C" stroke-width="3" stroke-linecap="round"/>
+                            <path d="M430 372 C422 372 410 366 408 356 C418 356 428 362 430 372Z" fill="#66BB6A"/>
+                            <path d="M430 366 C438 364 448 356 450 346 C440 348 432 356 430 366Z" fill="#81C784"/>
+                        </g>
+                    </svg>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ DETECT ============ -->
+        <section class="section" id="detect">
+            <div class="container">
+                <div class="section__head reveal">
+                    <span class="kicker" data-i18n="detect.kicker"></span>
+                    <h2 data-i18n="detect.title"></h2>
+                    <p data-i18n="detect.sub"></p>
+                </div>
+
+                <div class="detect reveal">
+                    <ol class="steps">
+                        <li class="steps__item"><span class="steps__num">1</span><span data-i18n="detect.s1"></span></li>
+                        <li class="steps__item"><span class="steps__num">2</span><span data-i18n="detect.s2"></span></li>
+                        <li class="steps__item"><span class="steps__num">3</span><span data-i18n="detect.s3"></span></li>
+                    </ol>
+
+                    <div class="scanner" id="scanner">
+                        <div class="status hidden" id="model-status" role="status" aria-live="polite">
+                            <span class="status__icon" id="status-icon" aria-hidden="true"></span>
+                            <div><strong id="status-title"></strong><small id="status-detail"></small></div>
+                        </div>
+                        <!-- Empty state -->
+                        <div class="drop" id="drop">
+                            <div class="drop__art" aria-hidden="true">
+                                <svg viewBox="0 0 120 120">
+                                    <circle cx="60" cy="60" r="52" fill="var(--surface-2)"/>
+                                    <path class="drop__leaf" d="M60 26c20 6 30 22 26 42-4 18-20 26-34 22C38 86 30 70 34 54c4-16 14-24 26-28z" fill="var(--leaf-2)"/>
+                                    <path d="M60 30 C56 50 56 70 50 88" stroke="var(--leaf-4)" stroke-width="3" fill="none" stroke-linecap="round"/>
+                                    <rect class="drop__beam" x="20" y="58" width="80" height="4" rx="2" fill="var(--mango-500)"/>
+                                    <path d="M22 36v-10h10M98 36v-10H88M22 84v10h10M98 84v10H88" stroke="var(--green-600)" stroke-width="4" fill="none" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <div class="drop__actions">
+                                <button class="btn btn--mango btn--lg btn--block" type="button" data-action="camera">
+                                    <span aria-hidden="true">📷</span><span data-i18n="detect.camera"></span>
+                                </button>
+                                <button class="btn btn--outline btn--lg btn--block" type="button" data-action="gallery">
+                                    <span aria-hidden="true">🖼️</span><span data-i18n="detect.gallery"></span>
+                                </button>
+                            </div>
+                            <p class="drop__or" data-i18n="detect.drop"></p>
+                            <p class="drop__hint" data-i18n="detect.hint"></p>
+                        </div>
+
+                        <!-- Preview state -->
+                        <div class="preview hidden" id="preview">
+                            <div class="preview__frame">
+                                <img id="preview-img" alt="" />
+                                <div class="preview__scan" id="preview-scan" aria-hidden="true"><span></span></div>
+                            </div>
+                            <p class="preview__tip" data-i18n="detect.tip"></p>
+                            <div class="preview__actions">
+                                <button class="btn btn--primary btn--lg btn--block" type="button" id="btn-check">
+                                    <span aria-hidden="true">🔍</span><span data-i18n="detect.check"></span>
+                                </button>
+                                <button class="btn btn--ghost" type="button" id="btn-change">
+                                    <span aria-hidden="true">↺</span><span data-i18n="detect.change"></span>
+                                </button>
+                            </div>
+                            <div class="loading hidden" id="loading" role="status" aria-live="polite">
+                                <div class="loading__sprout" aria-hidden="true"><i></i><i></i><i></i></div>
+                                <strong data-i18n="detect.loading1"></strong>
+                                <span data-i18n="detect.loading2"></span>
+                            </div>
+                        </div>
+
+                        <input type="file" id="input-camera" accept="image/*" capture="environment" hidden />
+                        <input type="file" id="input-gallery" accept="image/jpeg,image/png,image/webp,image/bmp,image/tiff" hidden />
+                    </div>
+                </div>
+
+                <!-- Results -->
+                <!-- Not a mango -->
+                <div class="nomango hidden" id="nomango" tabindex="-1" role="alert">
+                    <div class="nomango__photo"><img id="nomango-img" alt="" /><span class="nomango__x" aria-hidden="true">✕</span></div>
+                    <div class="nomango__text">
+                        <span class="kicker" data-i18n="res.kicker"></span>
+                        <h3 data-i18n="nm.title"></h3>
+                        <p id="nomango-sub"></p>
+                        <ul>
+                            <li data-i18n="nm.t1"></li>
+                            <li data-i18n="nm.t2"></li>
+                            <li data-i18n="nm.t3"></li>
+                        </ul>
+                        <button class="btn btn--mango btn--lg" type="button" id="btn-nomango-again"><span aria-hidden="true">📷</span><span data-i18n="nm.btn"></span></button>
+                    </div>
+                </div>
+
+                <div class="results hidden" id="results" tabindex="-1">
+                    <p class="demo-note hidden" id="demo-note" data-i18n="res.demo"></p>
+
+                    <div class="verdict" id="verdict">
+                        <div class="ring" aria-hidden="true">
+                            <svg viewBox="0 0 120 120">
+                                <circle class="ring__bg" cx="60" cy="60" r="50"/>
+                                <circle class="ring__fill" id="ring-fill" cx="60" cy="60" r="50"/>
+                            </svg>
+                            <div class="ring__label"><strong id="ring-pct">0%</strong><span data-i18n="res.sure"></span></div>
+                        </div>
+                        <div class="verdict__text">
+                            <span class="kicker" data-i18n="res.kicker"></span>
+                            <h3 class="verdict__title" id="verdict-title"></h3>
+                            <p class="verdict__sci" id="verdict-sci"></p>
+                            <div class="verdict__meta" id="verdict-meta"></div>
+                            <p class="verdict__warn hidden" id="verdict-warn" data-i18n="res.lowconf"></p>
+                            <div class="verdict__actions">
+                                <a class="btn btn--mango" href="#report" id="btn-to-report"><span aria-hidden="true">📄</span><span data-i18n="res.pdf"></span></a>
+                                <a class="btn btn--outline" href="#heat-card"><span aria-hidden="true">🔥</span><span data-i18n="res.seeheat"></span></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="insight">
+                        <div class="insight__card" id="heat-card">
+                            <h4><span aria-hidden="true">🔥</span> <span data-i18n="res.heattitle"></span></h4>
+                            <div class="heat" id="heat">
+                                <figure><img id="img-original" alt="" /><figcaption data-i18n="res.photo"></figcaption></figure>
+                                <figure><img id="img-heat" alt="" /><figcaption data-i18n="res.heat"></figcaption></figure>
+                                <figure id="fig-marked"><img id="img-marked" alt="" /><figcaption data-i18n="res.marked"></figcaption></figure>
+                            </div>
+                            <p class="heat__affected" id="heat-affected"></p>
+                            <div class="heat__legend" id="heat-legend">
+                                <span data-i18n="res.low"></span><i aria-hidden="true"></i><span data-i18n="res.high"></span>
+                            </div>
+                            <p class="heat__note" data-i18n="res.heatnote"></p>
+                        </div>
+                        <div class="insight__card">
+                            <h4><span aria-hidden="true">📊</span> <span data-i18n="res.scores"></span></h4>
+                            <div class="scores" id="scores"></div>
+                        </div>
+                    </div>
+
+                    <div class="advice">
+                        <div class="advice__card advice__card--todo">
+                            <h4><span aria-hidden="true">✅</span> <span data-i18n="res.todo"></span></h4>
+                            <ol id="todo-list"></ol>
+                        </div>
+                        <div class="advice__card advice__card--signs">
+                            <h4><span aria-hidden="true">👀</span> <span data-i18n="res.signs"></span></h4>
+                            <ul id="signs-list"></ul>
+                        </div>
+                    </div>
+
+                    <div class="results__actions">
+                        <a class="btn btn--leaf" href="#garden" id="btn-to-garden"><span aria-hidden="true">🌳</span><span data-i18n="res.garden"></span></a>
+                        <button class="btn btn--outline" type="button" id="btn-again"><span aria-hidden="true">📷</span><span data-i18n="res.again"></span></button>
+                    </div>
+
+                    <div class="report" id="report">
+                        <div class="report__text">
+                            <h4><span aria-hidden="true">📄</span> <span data-i18n="rep.title"></span></h4>
+                            <p data-i18n="rep.sub"></p>
+                            <p class="report__hint" data-i18n="rep.hint"></p>
+                        </div>
+                        <form class="report__form" id="report-form" novalidate>
+                            <label for="report-name" data-i18n="rep.name"></label>
+                            <div class="report__row">
+                                <input type="text" id="report-name" maxlength="100" autocomplete="name" data-i18n-attr="placeholder:rep.ph" />
+                            </div>
+                            <p class="report__choose" data-i18n="rep.choose"></p>
+                            <div class="report__langs">
+                                <button class="btn btn--mango" type="submit" data-pdf-lang="bn" lang="bn">
+                                    <span aria-hidden="true">⬇️</span><span data-i18n="rep.bn"></span>
+                                </button>
+                                <button class="btn btn--primary" type="submit" data-pdf-lang="en">
+                                    <span aria-hidden="true">⬇️</span><span data-i18n="rep.en"></span>
+                                </button>
+                            </div>
+                            <p class="field-error hidden" id="report-err" data-i18n="rep.err"></p>
+                            <p class="report__busy hidden" id="report-busy"><span class="spinner" aria-hidden="true"></span><span data-i18n="rep.busy"></span></p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ GARDEN IMPACT ============ -->
+        <section class="section section--tint" id="garden">
+            <div class="container">
+                <div class="section__head reveal">
+                    <span class="kicker" data-i18n="garden.kicker"></span>
+                    <h2 data-i18n="garden.title"></h2>
+                    <p data-i18n="garden.sub"></p>
+                </div>
+
+                <div class="tabs reveal" id="garden-tabs" role="tablist"></div>
+
+                <div class="garden reveal">
+                    <div class="garden__stage">
+                        <svg class="orchard" id="orchard" viewBox="0 0 600 230" role="img">
+                            <path d="M0 196 Q150 176 300 190 T600 184 V230 H0Z" fill="var(--hill-1)"/>
+                            <g id="orchard-trees"></g>
+                            <g id="orchard-particles"></g>
+                        </svg>
+                        <ol class="stages" id="stages">
+                            <li data-stage="1"><span class="stages__dot"></span><span data-i18n="garden.stage1"></span></li>
+                            <li data-stage="2"><span class="stages__dot"></span><span data-i18n="garden.stage2"></span></li>
+                            <li data-stage="3"><span class="stages__dot"></span><span data-i18n="garden.stage3"></span></li>
+                        </ol>
+                        <button class="btn btn--ghost btn--sm" type="button" id="btn-replay"><span aria-hidden="true">↻</span><span data-i18n="garden.replay"></span></button>
+                    </div>
+
+                    <div class="garden__info" id="garden-info" aria-live="polite"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ ENCYCLOPEDIA ============ -->
+        <section class="section" id="diseases">
+            <div class="container">
+                <div class="section__head reveal">
+                    <span class="kicker" data-i18n="dis.kicker"></span>
+                    <h2 data-i18n="dis.title"></h2>
+                    <p data-i18n="dis.sub"></p>
+                </div>
+                <div class="filters reveal" id="filters">
+                    <button class="filter is-active" type="button" data-filter="all" data-i18n="dis.all"></button>
+                    <button class="filter" type="button" data-filter="leaf">🍃 <span data-i18n="part.leaf"></span></button>
+                    <button class="filter" type="button" data-filter="flower">🌼 <span data-i18n="part.flower"></span></button>
+                    <button class="filter" type="button" data-filter="fruit">🥭 <span data-i18n="part.fruit"></span></button>
+                    <button class="filter" type="button" data-filter="branch">🪵 <span data-i18n="part.branch"></span></button>
+                </div>
+                <div class="cards" id="cards"></div>
+            </div>
+        </section>
+
+        <!-- ============ ENVIRONMENT ============ -->
+        <section class="section section--tint" id="impact">
+            <div class="container">
+                <div class="section__head reveal">
+                    <span class="kicker" data-i18n="env.kicker"></span>
+                    <h2 data-i18n="env.title"></h2>
+                    <p data-i18n="env.sub"></p>
+                </div>
+                <div class="eco">
+                    <article class="eco__card reveal">
+                        <div class="eco__icon eco__icon--spray" aria-hidden="true">🎯</div>
+                        <h3 data-i18n="env.c1t"></h3><p data-i18n="env.c1d"></p>
+                        <div class="eco__sdgs"><em>SDG</em><span style="--c:#BF8B2E" data-num="12">12</span><span style="--c:#56C02B" data-num="15">15</span></div>
+                    </article>
+                    <article class="eco__card reveal">
+                        <div class="eco__icon eco__icon--fruit" aria-hidden="true">🥭</div>
+                        <h3 data-i18n="env.c2t"></h3><p data-i18n="env.c2d"></p>
+                        <div class="eco__sdgs"><em>SDG</em><span style="--c:#DDA63A" data-num="2">2</span><span style="--c:#BF8B2E" data-num="12">12</span></div>
+                    </article>
+                    <article class="eco__card reveal">
+                        <div class="eco__icon eco__icon--bee" aria-hidden="true">🐝</div>
+                        <h3 data-i18n="env.c3t"></h3><p data-i18n="env.c3d"></p>
+                        <div class="eco__sdgs"><em>SDG</em><span style="--c:#56C02B" data-num="15">15</span><span style="--c:#3F7E44" data-num="13">13</span></div>
+                    </article>
+                    <article class="eco__card reveal">
+                        <div class="eco__icon eco__icon--farmer" aria-hidden="true">👨‍🌾</div>
+                        <h3 data-i18n="env.c4t"></h3><p data-i18n="env.c4d"></p>
+                        <div class="eco__sdgs"><em>SDG</em><span style="--c:#E5243B" data-num="1">1</span><span style="--c:#DDA63A" data-num="2">2</span></div>
+                    </article>
+                </div>
+                <div class="sdg reveal">
+                    <p class="sdg__title" data-i18n="env.sdg"></p>
+                    <ul class="sdg__cards">
+                        <li class="sdg__card" style="--c:#E5243B"><b data-num="1">1</b><div><strong data-i18n="env.sdg1"></strong><span data-i18n="env.sdg1d"></span></div></li>
+                        <li class="sdg__card" style="--c:#DDA63A"><b data-num="2">2</b><div><strong data-i18n="env.sdg2"></strong><span data-i18n="env.sdg2d"></span></div></li>
+                        <li class="sdg__card" style="--c:#BF8B2E"><b data-num="12">12</b><div><strong data-i18n="env.sdg12"></strong><span data-i18n="env.sdg12d"></span></div></li>
+                        <li class="sdg__card" style="--c:#3F7E44"><b data-num="13">13</b><div><strong data-i18n="env.sdg13"></strong><span data-i18n="env.sdg13d"></span></div></li>
+                        <li class="sdg__card" style="--c:#56C02B"><b data-num="15">15</b><div><strong data-i18n="env.sdg15"></strong><span data-i18n="env.sdg15d"></span></div></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ HOW IT WORKS ============ -->
+        <section class="section" id="how">
+            <div class="container">
+                <div class="section__head reveal">
+                    <span class="kicker" data-i18n="how.kicker"></span>
+                    <h2 data-i18n="how.title"></h2>
+                </div>
+                <ol class="flow reveal" id="flow">
+                    <li class="flow__step"><span class="flow__icon">📷</span><h3 data-i18n="how.s1"></h3></li>
+                    <li class="flow__step"><span class="flow__icon">🥭</span><h3 data-i18n="how.s2"></h3></li>
+                    <li class="flow__step"><span class="flow__icon">🔍</span><h3 data-i18n="how.s3"></h3></li>
+                    <li class="flow__step"><span class="flow__icon">🎯</span><h3 data-i18n="how.s4"></h3></li>
+                    <li class="flow__step"><span class="flow__icon">📄</span><h3 data-i18n="how.s5"></h3></li>
+                </ol>
+            </div>
+        </section>
+        <!-- ============ DEVELOPERS ============ -->
+        <section class="section section--tint" id="developers">
+            <div class="container">
+                <div class="section__head reveal">
+                    <span class="kicker" data-i18n="dev.kicker"></span>
+                    <h2 data-i18n="dev.title"></h2>
+                    <p data-i18n="dev.sub"></p>
+                </div>
+                <div class="dev reveal">
+                    <div class="dev__side">
+                        <ol class="dev__steps">
+                            <li><b>1</b><span data-i18n="dev.s1"></span></li>
+                            <li><b>2</b><span data-i18n="dev.s2"></span></li>
+                            <li><b>3</b><span data-i18n="dev.s3"></span></li>
+                            <li><b>4</b><span data-i18n="dev.s4"></span></li>
+                        </ol>
+                        <ul class="dev__features">
+                            <li>✅ <span data-i18n="dev.f1"></span></li>
+                            <li>✅ <span data-i18n="dev.f2"></span></li>
+                            <li>✅ <span data-i18n="dev.f3"></span></li>
+                            <li>✅ <span data-i18n="dev.f4"></span></li>
+                        </ul>
+                        <div class="dev__links">
+                            <a class="btn btn--primary" href="https://pypi.org/project/mango-disease-ai/" target="_blank" rel="noopener"><span aria-hidden="true">📦</span><span data-i18n="dev.pypi"></span></a>
+                            <a class="btn btn--outline" href="/docs" target="_blank" rel="noopener"><span aria-hidden="true">🧪</span><span data-i18n="dev.docs"></span></a>
+                            <a class="btn btn--ghost" href="https://github.com/Arpon-30" target="_blank" rel="noopener"><span aria-hidden="true">🐙</span>GitHub</a>
+                        </div>
+                    </div>
+                    <div class="code">
+                        <div class="code__tabs" role="tablist">
+                            <button class="code__tab" type="button" role="tab" data-code="py" aria-selected="true">Python</button>
+                            <button class="code__tab" type="button" role="tab" data-code="api" aria-selected="false">REST API</button>
+                            <button class="code__tab" type="button" role="tab" data-code="js" aria-selected="false">JavaScript</button>
+                            <button class="code__copy" type="button" id="code-copy"><span aria-hidden="true">📋</span> <span data-i18n="dev.copy"></span></button>
+                        </div>
+<pre class="code__panel" data-panel="py"><code><span class="c-cm"># 1. Install</span>
+pip install mango-disease-ai
+
+<span class="c-cm"># 2. Analyze a mango photo</span>
+<span class="c-kw">from</span> mango_disease_ai <span class="c-kw">import</span> analyze, generate_pdf
+
+result = analyze(<span class="c-st">"mango.jpg"</span>)
+
+<span class="c-kw">if</span> result[<span class="c-st">"is_mango"</span>]:
+    print(result[<span class="c-st">"predicted_class"</span>], result[<span class="c-st">"confidence"</span>])
+    print(result[<span class="c-st">"affected_percent"</span>], <span class="c-st">"% of the photo affected"</span>)
+
+    <span class="c-cm"># PDF report: lang="en" or lang="bn"</span>
+    pdf = generate_pdf(result, user_name=<span class="c-st">"Arpon"</span>, lang=<span class="c-st">"bn"</span>)
+    open(<span class="c-st">"report.pdf"</span>, <span class="c-st">"wb"</span>).write(pdf)
+<span class="c-kw">else</span>:
+    print(<span class="c-st">"Not a mango photo"</span>)</code></pre>
+<pre class="code__panel" data-panel="api" hidden><code><span class="c-cm"># 1. Install and start the REST API</span>
+pip install <span class="c-st">"mango-disease-ai[api]"</span>
+mango-api
+<span class="c-cm"># Swagger docs: http://localhost:8000/docs</span>
+
+<span class="c-cm"># 2. Analyze a photo</span>
+curl -F <span class="c-st">"image=@mango.jpg"</span> http://localhost:8000/api/analyze
+
+<span class="c-cm"># 3. Download a Bangla PDF report</span>
+curl -F <span class="c-st">"image=@mango.jpg"</span> -F <span class="c-st">"user_name=Arpon"</span> -F <span class="c-st">"lang=bn"</span> \
+     http://localhost:8000/api/report -o report.pdf</code></pre>
+<pre class="code__panel" data-panel="js" hidden><code><span class="c-cm">// Call the REST API from any web or mobile app</span>
+<span class="c-kw">const</span> form = <span class="c-kw">new</span> FormData();
+form.append(<span class="c-st">"image"</span>, fileInput.files[0]);
+
+<span class="c-kw">const</span> res = <span class="c-kw">await</span> fetch(<span class="c-st">"http://localhost:8000/api/analyze"</span>, {
+  method: <span class="c-st">"POST"</span>,
+  body: form
+});
+<span class="c-kw">const</span> data = <span class="c-kw">await</span> res.json();
+
+<span class="c-kw">if</span> (res.ok) console.log(data.predicted_class, data.confidence);
+<span class="c-kw">else</span> console.log(data.detail.code);   <span class="c-cm">// e.g. "not_mango"</span></code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <svg class="footer__wave" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true">
+            <path d="M0 30 Q360 0 720 30 T1440 30 V60 H0Z" fill="var(--footer-bg)"/>
+        </svg>
+        <div class="footer__body">
+            <div class="container footer__grid">
+                <div>
+                    <a class="brand brand--footer" href="#home">
+                        <span class="brand__name">Amropali<span>Net</span></span>
+                    </a>
+                    <p data-i18n="foot.tag"></p>
+                </div>
+                <div>
+                    <h4 data-i18n="foot.links"></h4>
+                    <ul class="footer__links">
+                        <li><a href="#detect" data-i18n="nav.detect"></a></li>
+                        <li><a href="#garden" data-i18n="nav.garden"></a></li>
+                        <li><a href="#diseases" data-i18n="nav.diseases"></a></li>
+                        <li><a href="#impact" data-i18n="nav.impact"></a></li>
+                        <li><a href="#how" data-i18n="nav.how"></a></li>
+                        <li><a href="#developers" data-i18n="nav.dev"></a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 data-i18n="foot.team"></h4>
+                    <p class="footer__team">
+                        <strong data-i18n="foot.group"></strong>
+                        <span>Arpon, Oni, Md. Ibtihazzaman</span>
+                        <span><span data-i18n="foot.sup"></span> Dr. Md. Saef Ullah Miah</span>
+                    </p>
+                </div>
+                <div>
+                    <h4 data-i18n="foot.contact"></h4>
+                    <ul class="footer__links footer__contact">
+                        <li><a href="mailto:arponamit.55@gmail.com"><span aria-hidden="true">✉️</span> arponamit.55@gmail.com</a></li>
+                        <li><a href="https://github.com/Arpon-30" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> github.com/Arpon-30</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="container footer__bottom">
+                <p data-i18n="foot.disc"></p>
+                <p data-i18n="foot.made"></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating scan button (phones) -->
+    <button class="fab is-hidden" type="button" data-action="camera">
+        <span aria-hidden="true">📷</span><span data-i18n="fab.scan"></span>
+    </button>
+
+    <!-- Toast -->
+    <div class="toast hidden" id="toast" role="alert">
+        <span class="toast__icon" aria-hidden="true">⚠️</span>
+        <span class="toast__msg"><span id="toast-msg"></span><small class="toast__detail" id="toast-detail"></small></span>
+        <button class="toast__close" type="button" id="toast-close" data-i18n-attr="aria-label:err.close">✕</button>
+    </div>
+
+    <!-- Disease detail -->
+    <dialog class="sheet" id="sheet" aria-labelledby="sheet-title">
+        <div class="sheet__inner" id="sheet-body"></div>
+    </dialog>
+</body>
+</html>

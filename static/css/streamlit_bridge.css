@@ -1,0 +1,191 @@
+/* Streamlit chrome overrides — keep original MangoAI glass UI dominant */
+
+#MainMenu,
+header[data-testid="stHeader"],
+footer,
+[data-testid="stToolbar"],
+[data-testid="stDecoration"],
+[data-testid="stStatusWidget"],
+[data-testid="stSidebar"],
+section[data-testid="stSidebar"],
+div[data-testid="collapsedControl"] {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+.stApp,
+[data-testid="stAppViewContainer"],
+[data-testid="stAppViewBlockContainer"],
+.main,
+.block-container,
+[data-testid="stMain"] {
+    background: transparent !important;
+    background-color: transparent !important;
+}
+
+html, body, .stApp {
+    background-color: var(--bg-base) !important;
+    color: var(--text-primary) !important;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif !important;
+}
+
+.block-container {
+    padding: 0 !important;
+    max-width: 100% !important;
+}
+
+div[data-testid="stVerticalBlock"] {
+    gap: 0.35rem !important;
+}
+
+/* Upload card: second row identical to section-header */
+#upload-section .upload-hit-area {
+    margin-bottom: 0;
+    padding: 1rem 1.1rem;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-card);
+    cursor: pointer;
+    transition: var(--transition-base);
+    text-align: left;
+    justify-content: flex-start;
+}
+
+#upload-section .upload-hit-area:hover {
+    border-color: var(--border-medium);
+    background: var(--bg-card-hover);
+    box-shadow: var(--shadow-glow);
+}
+
+#upload-section .section-header {
+    text-align: left;
+    justify-content: flex-start;
+}
+
+.upload-section {
+    text-align: left !important;
+}
+
+.upload-section .section-header {
+    justify-content: flex-start !important;
+}
+
+/* Invisible Streamlit uploader over the identical upload row */
+[data-testid="stFileUploader"]:not(:has([data-testid="stFileUploaderFileName"], [data-testid="stUploadedFile"])) {
+    margin-top: -5.25rem !important;
+    margin-bottom: 1.5rem !important;
+    height: 4.75rem !important;
+    max-width: 1000px;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding: 0 1.25rem !important;
+    z-index: 8;
+    position: relative;
+}
+
+[data-testid="stFileUploader"]:not(:has([data-testid="stFileUploaderFileName"], [data-testid="stUploadedFile"])) section,
+[data-testid="stFileUploader"]:not(:has([data-testid="stFileUploaderFileName"], [data-testid="stUploadedFile"])) [data-testid="stFileUploaderDropzone"] {
+    height: 100% !important;
+    min-height: 4.75rem !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    opacity: 0 !important;
+    cursor: pointer !important;
+}
+
+[data-testid="stFileUploader"]:has([data-testid="stFileUploaderFileName"], [data-testid="stUploadedFile"]) {
+    margin-top: 0.75rem !important;
+    margin-bottom: 0.75rem !important;
+    height: auto !important;
+    max-width: 1000px;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding: 0 1.25rem !important;
+}
+
+[data-testid="stFileUploader"] [data-testid="stFileUploaderFileName"],
+[data-testid="stFileUploader"] [data-testid="stUploadedFile"],
+[data-testid="stFileUploader"] small {
+    color: var(--text-secondary) !important;
+}
+
+/* Center preview / analyze within page width */
+[data-testid="stImage"],
+div[data-testid="stButton"] {
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 1.25rem;
+}
+
+div.stButton > button[kind="primary"],
+div.stButton > button[data-testid="baseButton-primary"] {
+    background: linear-gradient(135deg, var(--emerald-500), var(--emerald-600)) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: var(--radius-md) !important;
+    font-weight: 600 !important;
+    padding: 0.9rem 2.25rem !important;
+    box-shadow: 0 4px 20px rgba(34, 197, 94, 0.3) !important;
+    width: auto !important;
+    margin: 0.75rem auto 0 !important;
+}
+
+div.stButton > button[kind="secondary"],
+div.stButton > button[data-testid="baseButton-secondary"] {
+    background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: var(--radius-md) !important;
+    font-weight: 600 !important;
+    padding: 0.9rem 2.25rem !important;
+}
+
+div[data-testid="stButton"] {
+    text-align: center;
+}
+
+[data-testid="stTextInput"] {
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 1.25rem;
+}
+
+[data-testid="stTextInput"] label {
+    color: var(--text-primary) !important;
+    font-weight: 600 !important;
+}
+
+[data-testid="stTextInput"] input {
+    background: var(--bg-input) !important;
+    color: var(--text-primary) !important;
+    border: 1px solid var(--border-medium) !important;
+    border-radius: var(--radius-md) !important;
+}
+
+[data-testid="stDownloadButton"] > button {
+    background: linear-gradient(135deg, var(--emerald-500), var(--emerald-600)) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: var(--radius-md) !important;
+    font-weight: 600 !important;
+}
+
+[data-testid="stImage"] img {
+    border-radius: var(--radius-lg);
+    max-height: 280px;
+    object-fit: contain;
+    margin: 0 auto;
+}
+
+#encyclopedia-section,
+.encyclopedia-section,
+#main-container,
+.main-container {
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+}

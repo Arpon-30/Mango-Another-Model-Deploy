@@ -1,0 +1,30 @@
+# mango-disease-ai API — requirements
+# Install: pip install -r api/requirements.txt
+
+# ── Core ML dependencies (CPU only — faster Docker build) ──────────────────
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+torch==2.5.1+cpu
+torchvision==0.20.1+cpu
+
+# ── AI / ML ────────────────────────────────────────────────────────────────
+timm==1.0.15
+Pillow==11.1.0
+numpy==1.26.4
+opencv-python-headless==4.10.0.84
+scipy==1.14.1
+transformers==4.46.3
+huggingface-hub==0.27.1
+safetensors==0.5.2
+scikit-learn==1.5.2
+joblib==1.4.2
+
+# ── PDF generation ─────────────────────────────────────────────────────────
+fpdf2==2.8.2
+uharfbuzz==0.56.2      # correct Bangla letter joining in the Bangla PDF
+
+# ── API server ─────────────────────────────────────────────────────────────
+fastapi==0.115.0
+uvicorn[standard]==0.32.0
+python-multipart==0.0.12
+pydantic==2.9.2

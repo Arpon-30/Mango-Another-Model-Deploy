@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🥭 Mango Disease AI v0.1.3 — Complete Documentation</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#22c55e;--green-dark:#16a34a;--green-glow:rgba(34,197,94,.25);
+  --yellow:#eab308;--blue:#3b82f6;--purple:#a855f7;--red:#ef4444;
+  --bg:#030712;--bg2:#0d1117;--bg3:#161b22;--bg4:#21262d;
+  --border:#30363d;--text:#e6edf3;--muted:#7d8590;
+  --card-bg:rgba(22,27,34,.85);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6}
+::selection{background:var(--green-glow);color:var(--green)}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--green-dark)}
+
+/* NAV */
+nav{position:fixed;top:0;width:100%;z-index:100;backdrop-filter:blur(20px);background:rgba(3,7,18,.88);border-bottom:1px solid var(--border);padding:0 2rem}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:60px}
+.nav-logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.05rem;color:var(--text);text-decoration:none}
+.nav-logo span{color:var(--green)}
+.nav-links{display:flex;gap:1.75rem}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:.85rem;transition:color .2s}
+.nav-links a:hover{color:var(--green)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 22px;border-radius:8px;font-weight:600;font-size:.88rem;text-decoration:none;transition:all .2s;cursor:pointer;border:none;font-family:inherit}
+.btn-green{background:var(--green);color:#000}.btn-green:hover{background:#4ade80;transform:translateY(-2px);box-shadow:0 8px 24px rgba(34,197,94,.3)}
+.btn-outline{background:transparent;color:var(--text);border:1px solid var(--border)}.btn-outline:hover{border-color:var(--green);color:var(--green)}
+
+/* HERO */
+#hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;padding-top:60px}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(34,197,94,.15) 0%,transparent 70%)}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(48,54,61,.4) 1px,transparent 1px),linear-gradient(90deg,rgba(48,54,61,.4) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse 60% 70% at 50% 50%,black 0%,transparent 100%)}
+.hero-content{text-align:center;position:relative;z-index:2;max-width:820px;padding:2rem}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.3);color:var(--green);padding:6px 18px;border-radius:99px;font-size:.82rem;font-weight:600;margin-bottom:1.5rem;animation:fadeUp .8s ease both}
+.hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+h1.hero-title{font-size:clamp(2.4rem,5.5vw,4.2rem);font-weight:900;line-height:1.1;margin-bottom:1.2rem;animation:fadeUp .8s .1s ease both}
+.hero-title .mango{color:var(--green)}
+.hero-sub{font-size:1.05rem;color:var(--muted);max-width:600px;margin:0 auto 2.5rem;animation:fadeUp .8s .2s ease both}
+.hero-buttons{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;margin-bottom:3rem;animation:fadeUp .8s .3s ease both}
+.hero-stats{display:flex;gap:2.5rem;justify-content:center;animation:fadeUp .8s .4s ease both}
+.stat{text-align:center}.stat-num{font-size:1.8rem;font-weight:800;color:var(--green)}.stat-label{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+
+/* SECTIONS */
+section{padding:5.5rem 2rem}
+.container{max-width:1200px;margin:0 auto}
+.section-label{color:var(--green);font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.6rem}
+.section-title{font-size:clamp(1.7rem,3.5vw,2.6rem);font-weight:800;line-height:1.2;margin-bottom:.9rem}
+.section-sub{color:var(--muted);font-size:.95rem;max-width:580px;margin-bottom:2.5rem}
+
+/* TERMINAL */
+.terminal{background:#0d1117;border:1px solid var(--border);border-radius:12px;overflow:hidden;font-family:'JetBrains Mono',monospace;font-size:.84rem;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.terminal-bar{background:var(--bg3);padding:.65rem 1rem;display:flex;align-items:center;gap:.5rem;border-bottom:1px solid var(--border)}
+.dot{width:12px;height:12px;border-radius:50%}
+.dot-r{background:#ff5f57}.dot-y{background:#febc2e}.dot-g{background:#28c840}
+.terminal-title{color:var(--muted);font-size:.73rem;margin-left:.4rem}
+.terminal-body{padding:1.4rem;line-height:1.9}
+.t-prompt{color:var(--green)}.t-cmd{color:var(--text)}.t-comment{color:var(--muted)}
+.t-output{color:#7d8590}.t-success{color:var(--green)}.t-warn{color:var(--yellow)}
+.t-key{color:#79c0ff}.t-val{color:#a5d6ff}.t-str{color:#a8ff78}.t-num{color:var(--yellow)}
+
+/* COPY */
+.code-wrap{position:relative}
+.copy-btn{position:absolute;top:.7rem;right:.7rem;background:var(--bg4);border:1px solid var(--border);color:var(--muted);padding:4px 11px;border-radius:6px;font-size:.72rem;cursor:pointer;transition:all .2s;font-family:inherit;z-index:2}
+.copy-btn:hover,.copy-btn.copied{background:var(--green);border-color:var(--green);color:#000}
+
+/* STEP CARDS */
+.steps-grid{display:flex;flex-direction:column;gap:.75rem}
+.step-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:all .3s}
+.step-card:hover{border-color:var(--green-dark)}
+.step-header{display:flex;align-items:center;gap:1rem;padding:1.1rem 1.4rem;cursor:pointer;user-select:none}
+.step-number{width:34px;height:34px;border-radius:50%;background:var(--green);color:#000;font-weight:800;font-size:.88rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.step-title{font-weight:700;font-size:.95rem;flex:1}
+.step-badge{font-size:.72rem;padding:3px 10px;border-radius:99px;font-weight:600}
+.badge-easy{background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.3)}
+.badge-wait{background:rgba(234,179,8,.12);color:var(--yellow);border:1px solid rgba(234,179,8,.3)}
+.badge-note{background:rgba(59,130,246,.12);color:#79c0ff;border:1px solid rgba(59,130,246,.3)}
+.step-body{padding:0 1.4rem 1.4rem;border-top:1px solid var(--border);margin-top:0}
+.step-desc{font-size:.87rem;color:var(--muted);margin-bottom:1rem;padding-top:.9rem;line-height:1.7}
+.step-expected{background:rgba(34,197,94,.06);border:1px solid rgba(34,197,94,.2);border-radius:8px;padding:.9rem 1rem;margin-top:.9rem;font-size:.82rem}
+.step-expected-label{color:var(--green);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.4rem}
+.step-expected-text{color:var(--text);font-family:'JetBrains Mono',monospace;line-height:1.7}
+.chevron{color:var(--muted);font-size:.9rem;transition:transform .3s;margin-left:auto}
+.step-card.open .chevron{transform:rotate(180deg)}
+.step-body-wrap{max-height:0;overflow:hidden;transition:max-height .4s ease}
+.step-card.open .step-body-wrap{max-height:600px}
+
+/* GRID */
+.grid-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:1.5rem}
+.grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.25rem}
+.grid-4{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.9rem}
+
+/* CARDS */
+.card{background:var(--card-bg);border:1px solid var(--border);border-radius:12px;padding:1.4rem;transition:all .3s;backdrop-filter:blur(10px)}
+.card:hover{border-color:var(--green);box-shadow:0 0 24px var(--green-glow);transform:translateY(-4px)}
+.card-icon{font-size:1.8rem;margin-bottom:.9rem}.card-title{font-size:.95rem;font-weight:700;margin-bottom:.45rem}.card-desc{color:var(--muted);font-size:.85rem;line-height:1.7}
+
+/* ENDPOINT */
+.endpoint-card{background:var(--bg3);border:1px solid var(--border);border-radius:10px;overflow:hidden;transition:all .3s}
+.endpoint-card:hover{border-color:var(--green-dark);transform:translateY(-2px)}
+.endpoint-header{display:flex;align-items:center;gap:12px;padding:.9rem 1.2rem;border-bottom:1px solid var(--border)}
+.method{font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:700;padding:4px 10px;border-radius:6px;letter-spacing:.05em}
+.GET{background:rgba(34,197,94,.15);color:var(--green);border:1px solid rgba(34,197,94,.3)}
+.POST{background:rgba(234,179,8,.12);color:var(--yellow);border:1px solid rgba(234,179,8,.3)}
+.endpoint-path{font-family:'JetBrains Mono',monospace;font-size:.86rem;color:var(--text)}
+.endpoint-desc{padding:.9rem 1.2rem;color:var(--muted);font-size:.83rem}
+.endpoint-body{padding:0 1.2rem 1.2rem}
+
+/* OUTPUT BOX */
+.output-box{background:#000;border:1px solid var(--border);border-radius:8px;padding:1.1rem;font-family:'JetBrains Mono',monospace;font-size:.79rem;line-height:1.85;overflow-x:auto}
+
+/* TABS */
+.tabs{display:flex;gap:.4rem;margin-bottom:1.4rem;border-bottom:1px solid var(--border);padding-bottom:0}
+.tab{padding:.55rem 1.1rem;border-radius:8px 8px 0 0;cursor:pointer;font-size:.85rem;font-weight:500;color:var(--muted);border:1px solid transparent;border-bottom:none;transition:all .2s;margin-bottom:-1px}
+.tab.active{color:var(--green);border-color:var(--border);border-bottom-color:var(--bg);background:var(--bg3)}
+.tab:hover:not(.active){color:var(--text)}
+.tab-content{display:none}.tab-content.active{display:block}
+
+/* TAGS */
+.tags{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:.65rem}
+.tag{background:var(--bg4);border:1px solid var(--border);color:var(--muted);padding:3px 11px;border-radius:99px;font-size:.76rem;font-weight:500}
+.tag.green{border-color:rgba(34,197,94,.4);color:var(--green);background:rgba(34,197,94,.08)}
+.tag.blue{border-color:rgba(59,130,246,.4);color:#79c0ff;background:rgba(59,130,246,.08)}
+.tag.purple{border-color:rgba(168,85,247,.4);color:#d2a8ff;background:rgba(168,85,247,.08)}
+.tag.yellow{border-color:rgba(234,179,8,.4);color:var(--yellow);background:rgba(234,179,8,.08)}
+
+/* RESULT CARD */
+.result-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1.4rem;position:relative;overflow:hidden}
+.result-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--green),#4ade80,var(--green));background-size:200% 100%;animation:shimmer 2s infinite}
+.conf-bar{height:9px;background:var(--bg4);border-radius:5px;overflow:hidden;margin:5px 0}
+.conf-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--green),#4ade80);transition:width 1.2s ease}
+
+/* DISEASE */
+.disease-item{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.9rem;transition:all .3s}
+.disease-item:hover{border-color:var(--green);background:rgba(34,197,94,.05)}
+.disease-name{font-weight:700;font-size:.9rem}
+.disease-sci{font-size:.73rem;color:var(--muted);font-style:italic}
+
+/* ARCH */
+.arch-box{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:.9rem 1.1rem;text-align:center;font-size:.82rem;font-weight:600}
+.arch-arrow{text-align:center;color:var(--green);font-size:1.3rem;margin:.4rem 0}
+.arch-row{display:flex;gap:.9rem;align-items:center;margin-bottom:.65rem}
+.arch-row .arch-box{flex:1}
+.arch-label{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-top:.25rem}
+
+/* ANIMATIONS */
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.fade-in{opacity:0;transform:translateY(18px);transition:all .7s ease}
+.fade-in.visible{opacity:1;transform:none}
+.glow-line{height:1px;background:linear-gradient(90deg,transparent,var(--green),transparent);margin:0 auto;opacity:.5}
+.hl{color:var(--green);font-weight:600}.hl-b{color:#79c0ff}.hl-y{color:var(--yellow)}
+
+/* FOOTER */
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:3rem 2rem;text-align:center}
+.footer-inner{max-width:1200px;margin:0 auto}
+.footer-logo{font-size:1.4rem;font-weight:800;margin-bottom:.5rem}.footer-logo span{color:var(--green)}
+.footer-desc{color:var(--muted);font-size:.85rem;margin-bottom:1.4rem}
+.footer-links{display:flex;gap:1.4rem;justify-content:center;flex-wrap:wrap;margin-bottom:1.4rem}
+.footer-links a{color:var(--muted);text-decoration:none;font-size:.83rem;transition:color .2s}.footer-links a:hover{color:var(--green)}
+.footer-copy{color:var(--muted);font-size:.78rem}
+
+@media(max-width:768px){.grid-2,.grid-3{grid-template-columns:1fr}.hero-stats{gap:1.4rem}.nav-links{display:none}}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="#hero">🥭 <span>MangoAI</span> Docs</a>
+    <div class="nav-links">
+      <a href="#quickstart">Quick Start</a>
+      <a href="#install">Install</a>
+      <a href="#library">PyPI Library</a>
+      <a href="#api">REST API</a>
+      <a href="#endpoints">Endpoints</a>
+      <a href="#output">Output</a>
+      <a href="#architecture">Architecture</a>
+    </div>
+    <a href="https://pypi.org/project/mango-disease-ai/" target="_blank" class="btn btn-green">v0.1.3 on PyPI ↗</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">🟢 <span>v0.1.3 — Production Ready — Live on PyPI</span></div>
+    <h1 class="hero-title">🥭 <span class="mango">Mango Disease</span><br>AI — Complete Docs</h1>
+    <p class="hero-sub">AI-powered Amropali mango disease detection. One command to install, one command to run. Works from any folder, any machine, worldwide.</p>
+    <div class="hero-buttons">
+      <a href="#quickstart" class="btn btn-green">⚡ 8-Step Quick Start</a>
+      <a href="#api" class="btn btn-outline">🌐 REST API</a>
+      <a href="http://localhost:8000/docs" target="_blank" class="btn btn-outline">📖 Swagger UI ↗</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">7</div><div class="stat-label">Disease Classes</div></div>
+      <div class="stat"><div class="stat-num">94.7%</div><div class="stat-label">Top Accuracy</div></div>
+      <div class="stat"><div class="stat-num">5</div><div class="stat-label">API Endpoints</div></div>
+      <div class="stat"><div class="stat-num">0.1.3</div><div class="stat-label">Latest Version</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- QUICK START — 8 STEPS -->
+<section id="quickstart" style="background:var(--bg2)">
+  <div class="container">
+    <div class="section-label">Complete Guide</div>
+    <h2 class="section-title">⚡ 8-Step <span style="color:var(--green)">Quick Start</span></h2>
+    <p class="section-sub">From zero to fully running API — step by step. Works on Windows, Mac, Linux. No local folder needed.</p>
+
+    <div class="steps-grid">
+
+      <!-- STEP 1 -->
+      <div class="step-card open" id="s1">
+        <div class="step-header" onclick="toggleStep('s1')">
+          <div class="step-number">1</div>
+          <div class="step-title">Open PowerShell / Terminal</div>
+          <span class="step-badge badge-easy">Easy</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="step-body-wrap"><div class="step-body">
+          <p class="step-desc">Press <strong>Windows Key</strong> → type <strong>PowerShell</strong> → press <strong>Enter</strong>.<br>On Mac/Linux: open <strong>Terminal</strong>.</p>
+          <div class="step-expected"><div class="step-expected-label">✅ You will see</div><div class="step-expected-text">PS C:\Users\YourName&gt; _</div></div>
+        </div></div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="step-card" id="s2">
+        <div class="step-header" onclick="toggleStep('s2')">
+          <div class="step-number">2</div>
+          <div class="step-title">Install the Package</div>
+          <span class="step-badge badge-wait">~1 min</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="step-body-wrap"><div class="step-body">
+          <p class="step-desc">Copy and paste this command → press <strong>Enter</strong>. This installs the AI library + API server tools.</p>
+          <div class="code-wrap">
+            <div class="terminal">
+              <div class="terminal-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="terminal-title">PowerShell</span></div>
+              <div class="terminal-body">
+                <div><span class="t-prompt">PS&gt;</span> <span class="t-cmd">pip install "mango-disease-ai[api]"</span></div>
+              </div>
+            </div>
+            <button class="copy-btn" onclick='copyCode("pip install \"mango-disease-ai[api]\"")'>Copy</button>
+          </div>
+          <div class="step-expected"><div class="step-expected-label">✅ You will see at the end</div><div class="step-expected-text"><span class="t-success">Successfully installed mango-disease-ai-0.1.3</span></div></div>
+        </div></div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="step-card" id="s3">
+        <div class="step-header" onclick="toggleStep('s3')">
+          <div class="step-number">3</div>
+          <div class="step-title">Verify Installation</div>
+          <span class="step-badge badge-easy">5 seconds</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="step-body-wrap"><div class="step-body">
+          <p class="step-desc">Check that the package is installed correctly by printing the version number.</p>
+          <div class="code-wrap">
+            <div class="terminal">
+              <div class="terminal-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="terminal-title">PowerShell</span></div>
+              <div class="terminal-body">
+                <div><span class="t-prompt">PS&gt;</span> <span class="t-cmd">python -c "import mango_disease_ai; print(mango_disease_ai.__version__)"</span></div>
+              </div>
+            </div>
+            <button class="copy-btn" onclick='copyCode("python -c \"import mango_disease_ai; print(mango_disease_ai.__version__)\"")'>Copy</button>
+          </div>
+          <div class="step-expected"><div class="step-expected-label">✅ You will see</div><div class="step-expected-text"><span class="t-success">0.1.3</span></div></div>
+        </div></div>
+      </div>
+
+      <!-- STEP 4 -->
+      <div class="step-card" id="s4">
+        <div class="step-header" onclick="toggleStep('s4')">
+          <div class="step-number">4</div>
+          <div class="step-title">Start the API Server</div>
+          <span class="step-badge badge-wait">First run: 2-3 min</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="step-body-wrap"><div class="step-body">
+          <p class="step-desc">Run this single command from <strong>any folder</strong> — no need to navigate anywhere. The server starts on port 8000.</p>
+          <div class="code-wrap">
+            <div class="terminal">
+              <div class="terminal-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="terminal-title">PowerShell</span></div>
+              <div class="terminal-body">
+                <div><span class="t-prompt">PS&gt;</span> <span class="t-cmd">mango-api</span></div>
+                <div style="margin-top:.75rem"><span class="t-comment"># Custom port (optional)</span></div>
+                <div><span class="t-prompt">PS&gt;</span> <span class="t-cmd">mango-api --port 8080</span></div>
+                <div style="margin-top:.75rem"><span class="t-comment"># Alternative (also works)</span></div>
+                <div><span class="t-prompt">PS&gt;</span> <span class="t-cmd">python -m mango_disease_ai.server</span></div>
+              </div>
+            </div>
+            <button class="copy-btn" onclick='copyCode("mango-api")'>Copy</button>
+          </div>
+          <div class="step-expected">
+            <div class="step-expected-label">✅ You will see</div>
+            <div class="step-expected-text">
+              <span class="t-success">============================================================</span><br>
+              <span class="t-success">  🥭  Mango Disease AI -- REST API Server v0.1.3</span><br>
+              <span class="t-success">============================================================</span><br>
+              <span class="t-success">  Starting on  http://0.0.0.0:8000</span><br>
+              <span class="t-success">  Welcome page http://localhost:8000</span><br>
+              <span class="t-success">  Swagger UI   http://localhost:8000/docs</span><br>
+              <span class="t-success">  Full Docs    http://localhost:8000/guide</span><br>
+              <span class="t-success">  Press CTRL+C to stop.</span>
+            </div>
+          </div>
+          <div style="margin-top:.9rem;padding:.8rem 1rem;background:rgba(234,179,8,.08);border:1px solid rgba(234,179,8,.25);border-radius:8px;font-size:.82rem;color:var(--yellow)">
+            ⚠️ <strong>First run only:</strong> CLIP model (~600 MB) downloads automatically. Wait 2-3 minutes. All future runs start instantly.
+          </div>
+        </div></div>
+      </div>
+
+      <!-- STEP 5 -->
+      <div class="step-card" id="s5">
+        <div class="step-header" onclick="toggleStep('s5')">
+          <div class="step-number">5</div>
+          <div class="step-title">Open in Browser</div>
+          <span class="step-badge badge-easy">Easy</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="step-body-wrap"><div class="step-body">
+          <p class="step-desc">Open Chrome, Edge, or Firefox. Go to these URLs:</p>
+          <div style="display:flex;flex-direction:column;gap:.6rem;margin-top:.5rem">
+            <div class="card" style="padding:.9rem 1.1rem;display:flex;align-items:center;gap:1rem;border-color:rgba(34,197,94,.3)">
+              <div style="font-size:1.3rem">🏠</div>
+              <div><div style="font-weight:700;font-size:.9rem">Welcome Page</div><a href="http://localhost:8000" target="_blank" style="color:var(--green);font-family:'JetBrains Mono',monospace;font-size:.82rem">http://localhost:8000</a></div>
+            </div>
+            <div class="card" style="padding:.9rem 1.1rem;display:flex;align-items:center;gap:1rem;border-color:rgba(168,85,247,.3)">
+              <div style="font-size:1.3rem">📖</div>
+              <div><div style="font-weight:700;font-size:.9rem">Animated Docs (this page)</div><a href="http://localhost:8000/guide" target="_blank" style="color:#d2a8ff;font-family:'JetBrains Mono',monospace;font-size:.82rem">http://localhost:8000/guide</a></div>
+            </div>
+            <div class="card" style="padding:.9rem 1.1rem;display:flex;align-items:center;gap:1rem;border-color:rgba(59,130,246,.3)">
+              <div style="font-size:1.3rem">🧪</div>
+              <div><div style="font-weight:700;font-size:.9rem">Swagger UI — Test API Live</div><a href="http://localhost:8000/docs" target="_blank" style="color:#79c0ff;font-family:'JetBrains Mono',monospace;font-size:.82rem">http://localhost:8000/docs</a></div>
+            </div>
+            <div class="card" style="padding:.9rem 1.1rem;display:flex;align-items:center;gap:1rem">
+              <div style="font-size:1.3rem">❤️</div>
+              <div><div style="font-weight:700;font-size:.9rem">Health Check</div><a href="http://localhost:8000/api/health" target="_blank" style="color:var(--green);font-family:'JetBrains Mono',monospace;font-size:.82rem">http://localhost:8000/api/health</a></div>
+            </div>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- STEP 6 -->
+      <div class="step-card" id="s6">
+        <div class="step-header" onclick="toggleStep('s6')">
+          <div class="step-number">6</div>
+          <div class="step-title">Test the API via Swagger UI</div>
+          <span class="step-badge badge-note">In Browser</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="step-body-wrap"><div class="step-body">
+          <p class="step-desc">The easiest way to test — no code needed. All in the browser.</p>
+          <div style="display:flex;flex-direction:column;gap:.6rem">
+            <div style="display:flex;gap:.9rem;align-items:flex-start;font-size:.87rem">
+              <div style="width:24px;height:24px;border-radius:50%;background:var(--green);color:#000;font-weight:800;font-size:.78rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">a</div>
+              <div>Go to <a href="http://localhost:8000/docs" target="_blank" style="color:var(--green)">http://localhost:8000/docs</a></div>
+            </div>
+            <div style="display:flex;gap:.9rem;align-items:flex-start;font-size:.87rem">
+              <div style="width:24px;height:24px;border-radius:50%;background:var(--green);color:#000;font-weight:800;font-size:.78rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">b</div>
+              <div>Click <strong style="color:var(--yellow)">POST /api/analyze</strong> to expand it</div>
+            </div>
+            <div style="display:flex;gap:.9rem;align-items:flex-start;font-size:.87rem">
+              <div style="width:24px;height:24px;border-radius:50%;background:var(--green);color:#000;font-weight:800;font-size:.78rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">c</div>
+              <div>Click <strong>"Try it out"</strong> button</div>
+            </div>
+            <div style="display:flex;gap:.9rem;align-items:flex-start;font-size:.87rem">
+              <div style="width:24px;height:24px;border-radius:50%;background:var(--green);color:#000;font-weight:800;font-size:.78rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">d</div>
+              <div>Click <strong>"Choose File"</strong> → pick your mango image → set <code style="color:var(--green)">include_gradcam = false</code></div>
+            </div>
+            <div style="display:flex;gap:.9rem;align-items:flex-start;font-size:.87rem">
+              <div style="width:24px;height:24px;border-radius:50%;background:var(--green);color:#000;font-weight:800;font-size:.78rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px">e</div>
+              <div>Click the blue <strong>"Execute"</strong> button → see the JSON result below</div>
+            </div>
+          </div>
+          <div class="step-expected" style="margin-top:.9rem"><div class="step-expected-label">✅ Example response</div><div class="step-expected-text" style="font-size:.78rem">{"is_mango": true, "predicted_class": <span class="t-str">"Healthy"</span>, "confidence": <span class="t-num">0.9470</span>}</div></div>
+        </div></div>
+      </div>
+
+      <!-- STEP 7 -->
+      <div class="step-card" id="s7">
+        <div class="step-header" onclick="toggleStep('s7')">
+          <div class="step-number">7</div>
+          <div class="step-title">Use in Python Code (Optional)</div>
+          <span class="step-badge badge-note">Developers</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="step-body-wrap"><div class="step-body">
+          <p class="step-desc">Use the library directly in your own Python scripts — no server needed.</p>
+          <div class="code-wrap">
+            <div class="terminal">
+              <div class="terminal-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="terminal-title">my_script.py</span></div>
+              <div class="terminal-body" style="font-size:.81rem">
+                <div><span class="t-key">from</span> <span class="t-val">mango_disease_ai</span> <span class="t-key">import</span> analyze, generate_pdf</div>
+                <div style="margin-top:.6rem"><span class="t-comment"># Analyze any mango image</span></div>
+                <div>result = analyze(<span class="t-str">"your_mango.jpg"</span>)</div>
+                <div style="margin-top:.4rem"><span class="t-key">if</span> result[<span class="t-str">"is_mango"</span>]:</div>
+                <div>&nbsp;&nbsp;print(<span class="t-str">"Disease :"</span>, result[<span class="t-str">"predicted_class"</span>])</div>
+                <div>&nbsp;&nbsp;print(<span class="t-str">"Confidence:"</span>, <span class="t-key">f</span><span class="t-str">"{result['confidence']:.1%}"</span>)</div>
+                <div style="margin-top:.6rem"><span class="t-comment"># Generate PDF report</span></div>
+                <div>pdf = generate_pdf(result, user_name=<span class="t-str">"Dr. Rahman"</span>)</div>
+                <div>open(<span class="t-str">"report.pdf"</span>, <span class="t-str">"wb"</span>).write(pdf)</div>
+                <div style="margin-top:.5rem"><span class="t-success"># Disease : Healthy</span></div>
+                <div><span class="t-success"># Confidence: 94.7%</span></div>
+              </div>
+            </div>
+            <button class="copy-btn" onclick='copyCode("from mango_disease_ai import analyze, generate_pdf\n\nresult = analyze(\"your_mango.jpg\")\nif result[\"is_mango\"]:\n    print(\"Disease :\", result[\"predicted_class\"])\n    print(\"Confidence:\", f\"{result[\"confidence\"]:.1%}\")\n\npdf = generate_pdf(result, user_name=\"Dr. Rahman\")\nopen(\"report.pdf\", \"wb\").write(pdf)")'>Copy</button>
+          </div>
+        </div></div>
+      </div>
+
+      <!-- STEP 8 -->
+      <div class="step-card" id="s8">
+        <div class="step-header" onclick="toggleStep('s8')">
+          <div class="step-number">8</div>
+          <div class="step-title">Stop the Server / Upgrade Later</div>
+          <span class="step-badge badge-easy">Easy</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="step-body-wrap"><div class="step-body">
+          <p class="step-desc">Stop the server and keep your package updated.</p>
+          <div class="code-wrap">
+            <div class="terminal">
+              <div class="terminal-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="terminal-title">PowerShell</span></div>
+              <div class="terminal-body" style="font-size:.82rem">
+                <div><span class="t-comment"># Stop the server</span></div>
+                <div><span class="t-warn">Press CTRL + C</span>  <span class="t-comment">(in the terminal where mango-api is running)</span></div>
+                <div style="margin-top:.75rem"><span class="t-comment"># Upgrade to latest version later</span></div>
+                <div><span class="t-prompt">PS&gt;</span> <span class="t-cmd">pip install --upgrade "mango-disease-ai[api]"</span></div>
+                <div style="margin-top:.75rem"><span class="t-comment"># Check version anytime</span></div>
+                <div><span class="t-prompt">PS&gt;</span> <span class="t-cmd">python -c "import mango_disease_ai; print(mango_disease_ai.__version__)"</span></div>
+                <div style="margin-top:.75rem"><span class="t-comment"># See all options</span></div>
+                <div><span class="t-prompt">PS&gt;</span> <span class="t-cmd">mango-api --help</span></div>
+              </div>
+            </div>
+            <button class="copy-btn" onclick='copyCode("pip install --upgrade \"mango-disease-ai[api]\"")'>Copy</button>
+          </div>
+        </div></div>
+      </div>
+
+    </div><!-- end steps-grid -->
+  </div>
+</section>
+
+<div class="glow-line" style="width:200px"></div>
+
+<!-- INSTALL SECTION -->
+<section id="install">
+  <div class="container">
+    <div class="section-label">Installation Options</div>
+    <h2 class="section-title">Install <span style="color:var(--green)">Options</span></h2>
+    <p class="section-sub">Choose what you need — library only, or library + API server.</p>
+    <div class="grid-2" style="align-items:start">
+      <div style="display:flex;flex-direction:column;gap:1rem">
+        <div class="code-wrap">
+          <div class="terminal">
+            <div class="terminal-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="terminal-title">Recommended — Full Install</span></div>
+            <div class="terminal-body" style="font-size:.82rem">
+              <div><span class="t-comment"># Library + API server + mango-api command</span></div>
+              <div><span class="t-prompt">PS&gt;</span> <span class="t-cmd">pip install "mango-disease-ai[api]"</span></div>
+              <div style="margin-top:.75rem"><span class="t-comment"># Library only (no server)</span></div>
+              <div><span class="t-prompt">PS&gt;</span> <span class="t-cmd">pip install mango-disease-ai</span></div>
+              <div style="margin-top:.75rem"><span class="t-comment"># Anaconda users (Windows)</span></div>
+              <div><span class="t-prompt">PS&gt;</span> <span class="t-cmd">& "E:\Anaconda\python.exe" -m pip install "mango-disease-ai[api]"</span></div>
+            </div>
+          </div>
+          <button class="copy-btn" onclick='copyCode("pip install \"mango-disease-ai[api]\"")'>Copy</button>
+        </div>
+        <div class="card" style="border-color:rgba(34,197,94,.3);padding:1.1rem">
+          <div style="font-size:.88rem;font-weight:700;margin-bottom:.5rem">📦 What gets installed with <code>[api]</code></div>
+          <div class="tags">
+            <span class="tag green">mango-disease-ai</span>
+            <span class="tag blue">fastapi</span>
+            <span class="tag green">uvicorn[standard]</span>
+            <span class="tag purple">python-multipart</span>
+          </div>
+          <div style="margin-top:.75rem;font-size:.82rem;color:var(--muted)">Plus: torch, CLIP, timm, Pillow, opencv, fpdf2, transformers (all auto-installed)</div>
+        </div>
+      </div>
+      <div class="grid-3" style="gap:.75rem">
+        <div class="card" style="padding:1rem;text-align:center">
+          <div style="font-size:1.6rem;margin-bottom:.5rem">🐍</div>
+          <div style="font-weight:700;font-size:.88rem;margin-bottom:.3rem">Python Devs</div>
+          <div style="font-size:.78rem;color:var(--muted)">pip install<br>mango-disease-ai</div>
+        </div>
+        <div class="card" style="padding:1rem;text-align:center;border-color:rgba(34,197,94,.3)">
+          <div style="font-size:1.6rem;margin-bottom:.5rem">🌐</div>
+          <div style="font-weight:700;font-size:.88rem;margin-bottom:.3rem">API Devs</div>
+          <div style="font-size:.78rem;color:var(--muted)">pip install<br>"...[api]"</div>
+        </div>
+        <div class="card" style="padding:1rem;text-align:center">
+          <div style="font-size:1.6rem;margin-bottom:.5rem">📱</div>
+          <div style="font-weight:700;font-size:.88rem;margin-bottom:.3rem">Any Language</div>
+          <div style="font-size:.78rem;color:var(--muted)">HTTP POST to<br>localhost:8000</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="glow-line" style="width:200px"></div>
+
+<!-- PYPI LIBRARY -->
+<section id="library" style="background:var(--bg2)">
+  <div class="container">
+    <div class="section-label">Section A — Python Developers</div>
+    <h2 class="section-title">PyPI Library — <span style="color:var(--green)">Python Usage</span></h2>
+    <div class="tabs" id="pypiTabs">
+      <div class="tab active" onclick="switchTab('pypi','basic')">Basic</div>
+      <div class="tab" onclick="switchTab('pypi','full')">Full Output</div>
+      <div class="tab" onclick="switchTab('pypi','pdf')">PDF Report</div>
+      <div class="tab" onclick="switchTab('pypi','fast')">Fast Mode</div>
+    </div>
+    <div id="pypi-basic" class="tab-content active">
+      <div class="grid-2">
+        <div class="code-wrap">
+          <div class="terminal">
+            <div class="terminal-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="terminal-title">basic.py</span></div>
+            <div class="terminal-body" style="font-size:.82rem">
+              <div><span class="t-key">from</span> <span class="t-val">mango_disease_ai</span> <span class="t-key">import</span> analyze</div>
+              <div style="margin-top:.5rem">result = analyze(<span class="t-str">"mango.jpg"</span>)</div>
+              <div style="margin-top:.5rem"><span class="t-key">if</span> result[<span class="t-str">"is_mango"</span>]:</div>
+              <div>&nbsp;&nbsp;print(result[<span class="t-str">"predicted_class"</span>])</div>
+              <div>&nbsp;&nbsp;print(result[<span class="t-str">"confidence"</span>])</div>
+              <div><span class="t-key">else</span>:</div>
+              <div>&nbsp;&nbsp;print(<span class="t-str">"Not a mango!"</span>)</div>
+            </div>
+          </div>
+          <button class="copy-btn" onclick='copyCode("from mango_disease_ai import analyze\nresult = analyze(\"mango.jpg\")\nif result[\"is_mango\"]:\n    print(result[\"predicted_class\"])\n    print(result[\"confidence\"])\nelse:\n    print(\"Not a mango!\")")'>Copy</button>
+        </div>
+        <div class="result-card">
+          <div style="font-size:.75rem;color:var(--muted);margin-bottom:.7rem;text-transform:uppercase;letter-spacing:.08em">📤 Output</div>
+          <div class="output-box"><div><span class="t-success">Healthy</span></div><div><span class="t-num">0.9470</span></div></div>
+        </div>
+      </div>
+    </div>
+    <div id="pypi-full" class="tab-content">
+      <div class="code-wrap">
+        <div class="terminal">
+          <div class="terminal-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="terminal-title">full_output.py</span></div>
+          <div class="terminal-body" style="font-size:.81rem">
+            <div><span class="t-key">from</span> <span class="t-val">mango_disease_ai</span> <span class="t-key">import</span> analyze</div>
+            <div style="margin-top:.5rem">result = analyze(<span class="t-str">"mango.jpg"</span>)</div>
+            <div style="margin-top:.5rem"><span class="t-key">if</span> result[<span class="t-str">"is_mango"</span>]:</div>
+            <div>&nbsp;&nbsp;<span class="t-key">for</span> s <span class="t-key">in</span> result[<span class="t-str">"all_scores"</span>]:</div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;print(s[<span class="t-str">'class'</span>], <span class="t-key">f</span><span class="t-str">"{s['score']:.1%}"</span>)</div>
+            <div>&nbsp;&nbsp;info = result[<span class="t-str">"disease_info"</span>]</div>
+            <div>&nbsp;&nbsp;print(info[<span class="t-str">"scientific_name"</span>])</div>
+            <div>&nbsp;&nbsp;print(info[<span class="t-str">"symptoms"</span>])</div>
+            <div>&nbsp;&nbsp;print(info[<span class="t-str">"remedies"</span>])</div>
+          </div>
+        </div>
+        <button class="copy-btn" onclick='copyCode("from mango_disease_ai import analyze\nresult = analyze(\"mango.jpg\")\nif result[\"is_mango\"]:\n    for s in result[\"all_scores\"]:\n        print(s[\"class\"], f\"{s[\"score\"]:.1%}\")\n    info = result[\"disease_info\"]\n    print(info[\"scientific_name\"])")'>Copy</button>
+      </div>
+    </div>
+    <div id="pypi-pdf" class="tab-content">
+      <div class="code-wrap">
+        <div class="terminal">
+          <div class="terminal-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="terminal-title">pdf_report.py</span></div>
+          <div class="terminal-body" style="font-size:.81rem">
+            <div><span class="t-key">from</span> <span class="t-val">mango_disease_ai</span> <span class="t-key">import</span> analyze, generate_pdf</div>
+            <div style="margin-top:.5rem">result = analyze(<span class="t-str">"mango.jpg"</span>)</div>
+            <div><span class="t-key">if</span> result[<span class="t-str">"is_mango"</span>]:</div>
+            <div>&nbsp;&nbsp;pdf = generate_pdf(result, user_name=<span class="t-str">"Dr. Rahman"</span>)</div>
+            <div>&nbsp;&nbsp;open(<span class="t-str">"report.pdf"</span>, <span class="t-str">"wb"</span>).write(pdf)</div>
+            <div>&nbsp;&nbsp;print(<span class="t-str">"Saved: report.pdf"</span>)</div>
+          </div>
+        </div>
+        <button class="copy-btn" onclick='copyCode("from mango_disease_ai import analyze, generate_pdf\nresult = analyze(\"mango.jpg\")\nif result[\"is_mango\"]:\n    pdf = generate_pdf(result, user_name=\"Dr. Rahman\")\n    open(\"report.pdf\", \"wb\").write(pdf)\n    print(\"Saved: report.pdf\")")'>Copy</button>
+      </div>
+    </div>
+    <div id="pypi-fast" class="tab-content">
+      <div class="code-wrap">
+        <div class="terminal">
+          <div class="terminal-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="terminal-title">fast_mode.py</span></div>
+          <div class="terminal-body" style="font-size:.81rem">
+            <div><span class="t-comment"># Fast mode — skip heatmap (~2s vs ~8s)</span></div>
+            <div><span class="t-key">from</span> <span class="t-val">mango_disease_ai</span> <span class="t-key">import</span> analyze</div>
+            <div>result = analyze(<span class="t-str">"mango.jpg"</span>, include_gradcam=<span class="t-num">False</span>)</div>
+            <div>print(result[<span class="t-str">"predicted_class"</span>])  <span class="t-comment"># works</span></div>
+            <div>print(result[<span class="t-str">"gradcam_base64"</span>])  <span class="t-comment"># None</span></div>
+          </div>
+        </div>
+        <button class="copy-btn" onclick='copyCode("from mango_disease_ai import analyze\nresult = analyze(\"mango.jpg\", include_gradcam=False)\nprint(result[\"predicted_class\"])")'>Copy</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="glow-line" style="width:200px"></div>
+
+<!-- REST API -->
+<section id="api">
+  <div class="container">
+    <div class="section-label">Section B — All Developers</div>
+    <h2 class="section-title">REST API — <span style="color:var(--yellow)">HTTP Endpoints</span></h2>
+    <p class="section-sub">Use from Python, JavaScript, Java, Swift, PHP — any language that sends HTTP.</p>
+    <div class="tabs" id="apiTabs">
+      <div class="tab active" onclick="switchTab('api','browser')">🌐 Browser</div>
+      <div class="tab" onclick="switchTab('api','python')">🐍 Python</div>
+      <div class="tab" onclick="switchTab('api','js')">⚡ JavaScript</div>
+      <div class="tab" onclick="switchTab('api','curl')">🔧 curl</div>
+    </div>
+    <div id="api-browser" class="tab-content active">
+      <div class="code-wrap">
+        <div class="terminal">
+          <div class="terminal-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="terminal-title">Start Server — Any Folder</span></div>
+          <div class="terminal-body" style="font-size:.82rem">
+            <div><span class="t-comment"># Start from ANYWHERE — no cd needed!</span></div>
+            <div><span class="t-prompt">PS&gt;</span> <span class="t-cmd">mango-api</span></div>
+            <div style="margin-top:.75rem"><span class="t-comment"># Then open browser:</span></div>
+            <div><span class="t-success">http://localhost:8000/docs</span>  <span class="t-comment">← Swagger UI (test everything)</span></div>
+            <div><span class="t-success">http://localhost:8000/guide</span> <span class="t-comment">← This documentation</span></div>
+            <div><span class="t-success">http://localhost:8000</span>      <span class="t-comment">← Welcome page</span></div>
+          </div>
+        </div>
+        <button class="copy-btn" onclick='copyCode("mango-api")'>Copy</button>
+      </div>
+    </div>
+    <div id="api-python" class="tab-content">
+      <div class="code-wrap">
+        <div class="terminal">
+          <div class="terminal-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="terminal-title">requests_demo.py</span></div>
+          <div class="terminal-body" style="font-size:.8rem">
+            <div><span class="t-key">import</span> requests</div>
+            <div style="margin-top:.6rem"><span class="t-comment"># Health check</span></div>
+            <div>r = requests.get(<span class="t-str">"http://localhost:8000/api/health"</span>)</div>
+            <div>print(r.json())  <span class="t-comment"># {"status":"ok","version":"0.1.3"}</span></div>
+            <div style="margin-top:.6rem"><span class="t-comment"># Analyze image</span></div>
+            <div><span class="t-key">with</span> open(<span class="t-str">"mango.jpg"</span>, <span class="t-str">"rb"</span>) <span class="t-key">as</span> f:</div>
+            <div>&nbsp;&nbsp;r = requests.post(<span class="t-str">"http://localhost:8000/api/analyze"</span>,</div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;files={<span class="t-str">"image"</span>: f}, data={<span class="t-str">"include_gradcam"</span>: <span class="t-str">"false"</span>})</div>
+            <div>result = r.json()</div>
+            <div>print(result[<span class="t-str">"predicted_class"</span>], result[<span class="t-str">"confidence"</span>])</div>
+            <div style="margin-top:.6rem"><span class="t-comment"># Download PDF</span></div>
+            <div><span class="t-key">with</span> open(<span class="t-str">"mango.jpg"</span>, <span class="t-str">"rb"</span>) <span class="t-key">as</span> f:</div>
+            <div>&nbsp;&nbsp;r = requests.post(<span class="t-str">"http://localhost:8000/api/report"</span>,</div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;files={<span class="t-str">"image"</span>: f}, data={<span class="t-str">"user_name"</span>: <span class="t-str">"Dr. Rahman"</span>})</div>
+            <div>open(<span class="t-str">"report.pdf"</span>, <span class="t-str">"wb"</span>).write(r.content)</div>
+          </div>
+        </div>
+        <button class="copy-btn" onclick='copyCode("import requests\nwith open(\"mango.jpg\", \"rb\") as f:\n    r = requests.post(\"http://localhost:8000/api/analyze\",\n        files={\"image\": f}, data={\"include_gradcam\": \"false\"})\nresult = r.json()\nprint(result[\"predicted_class\"], result[\"confidence\"])")'>Copy</button>
+      </div>
+    </div>
+    <div id="api-js" class="tab-content">
+      <div class="code-wrap">
+        <div class="terminal">
+          <div class="terminal-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="terminal-title">app.js</span></div>
+          <div class="terminal-body" style="font-size:.8rem">
+            <div><span class="t-key">async function</span> <span class="t-val">analyzeMango</span>(imageFile) {</div>
+            <div>&nbsp;&nbsp;<span class="t-key">const</span> formData = <span class="t-key">new</span> FormData();</div>
+            <div>&nbsp;&nbsp;formData.append(<span class="t-str">"image"</span>, imageFile);</div>
+            <div>&nbsp;&nbsp;formData.append(<span class="t-str">"include_gradcam"</span>, <span class="t-str">"false"</span>);</div>
+            <div>&nbsp;&nbsp;<span class="t-key">const</span> res = <span class="t-key">await</span> fetch(<span class="t-str">"http://localhost:8000/api/analyze"</span>,</div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;{ method: <span class="t-str">"POST"</span>, body: formData });</div>
+            <div>&nbsp;&nbsp;<span class="t-key">if</span> (res.status === <span class="t-num">422</span>) { alert(<span class="t-str">"Not a mango!"</span>); <span class="t-key">return</span>; }</div>
+            <div>&nbsp;&nbsp;<span class="t-key">const</span> result = <span class="t-key">await</span> res.json();</div>
+            <div>&nbsp;&nbsp;console.log(result.predicted_class, result.confidence);</div>
+            <div>&nbsp;&nbsp;document.getElementById(<span class="t-str">"heatmap"</span>).src =</div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-str">"data:image/png;base64,"</span> + result.gradcam_base64;</div>
+            <div>}</div>
+          </div>
+        </div>
+        <button class="copy-btn" onclick='copyCode("async function analyzeMango(imageFile) {\n  const formData = new FormData();\n  formData.append(\"image\", imageFile);\n  formData.append(\"include_gradcam\", \"false\");\n  const res = await fetch(\"http://localhost:8000/api/analyze\", { method: \"POST\", body: formData });\n  const result = await res.json();\n  console.log(result.predicted_class, result.confidence);\n}")'>Copy</button>
+      </div>
+    </div>
+    <div id="api-curl" class="tab-content">
+      <div class="code-wrap">
+        <div class="terminal">
+          <div class="terminal-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="terminal-title">Terminal / cmd</span></div>
+          <div class="terminal-body" style="font-size:.82rem">
+            <div><span class="t-comment"># Health check</span></div>
+            <div><span class="t-prompt">$</span> <span class="t-cmd">curl http://localhost:8000/api/health</span></div>
+            <div style="margin-top:.5rem"><span class="t-comment"># Analyze image</span></div>
+            <div><span class="t-prompt">$</span> <span class="t-cmd">curl -X POST http://localhost:8000/api/analyze \</span></div>
+            <div>&nbsp;&nbsp;<span class="t-cmd">-F "image=@mango.jpg" -F "include_gradcam=false"</span></div>
+            <div style="margin-top:.5rem"><span class="t-comment"># Download PDF</span></div>
+            <div><span class="t-prompt">$</span> <span class="t-cmd">curl -X POST http://localhost:8000/api/report \</span></div>
+            <div>&nbsp;&nbsp;<span class="t-cmd">-F "image=@mango.jpg" -F "user_name=Dr. Rahman" \</span></div>
+            <div>&nbsp;&nbsp;<span class="t-cmd">--output report.pdf</span></div>
+          </div>
+        </div>
+        <button class="copy-btn" onclick='copyCode("curl -X POST http://localhost:8000/api/analyze -F \"image=@mango.jpg\" -F \"include_gradcam=false\"")'>Copy</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ENDPOINTS -->
+<section id="endpoints" style="background:var(--bg2)">
+  <div class="container">
+    <div class="section-label">All Endpoints</div>
+    <h2 class="section-title">5 API <span style="color:var(--green)">Endpoints</span></h2>
+    <div style="display:flex;flex-direction:column;gap:.9rem">
+      <div class="endpoint-card fade-in"><div class="endpoint-header"><span class="method GET">GET</span><span class="endpoint-path">/api/health</span><span style="margin-left:auto;font-size:.78rem;color:var(--muted)">~10ms</span></div><div class="endpoint-desc">Server alive check. Returns OK + version.</div><div class="endpoint-body"><div class="output-box" style="font-size:.8rem"><span class="t-output">{"status": "ok", "version": "0.1.3"}</span></div></div></div>
+      <div class="endpoint-card fade-in"><div class="endpoint-header"><span class="method GET">GET</span><span class="endpoint-path">/api/diseases</span><span style="margin-left:auto;font-size:.78rem;color:var(--muted)">~5ms</span></div><div class="endpoint-desc">All 7 disease classes with scientific name, symptoms, remedies.</div></div>
+      <div class="endpoint-card fade-in"><div class="endpoint-header"><span class="method POST">POST</span><span class="endpoint-path">/api/analyze</span><span style="margin-left:auto;font-size:.78rem;color:var(--muted)">~2-8 sec</span></div><div class="endpoint-desc">Upload mango image → full diagnosis JSON. Returns HTTP 422 if not a mango.</div><div class="endpoint-body"><div class="output-box" style="font-size:.77rem"><div>{"is_mango": <span class="t-num">true</span>, "predicted_class": <span class="t-str">"Healthy"</span>, "confidence": <span class="t-num">0.9470</span>,</div><div>&nbsp;"all_scores": [{...}, ...], "disease_info": {...}, "gradcam_base64": <span class="t-str">"..."</span>}</div></div></div></div>
+      <div class="endpoint-card fade-in"><div class="endpoint-header"><span class="method POST">POST</span><span class="endpoint-path">/api/report</span><span style="margin-left:auto;font-size:.78rem;color:var(--muted)">~10-15 sec</span></div><div class="endpoint-desc">Upload image + name → download PDF report. Body: <code style="color:var(--green)">image</code> + <code style="color:var(--green)">user_name</code>.</div></div>
+      <div class="endpoint-card fade-in"><div class="endpoint-header"><span class="method GET">GET</span><span class="endpoint-path">/guide</span><span style="margin-left:auto;font-size:.78rem;color:var(--muted)">This Page</span></div><div class="endpoint-desc">This animated documentation page — bundled inside the package.</div><div class="endpoint-body"><a href="http://localhost:8000/guide" target="_blank" class="btn btn-green" style="font-size:.8rem;padding:8px 18px">Open ↗</a></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- OUTPUT PREVIEW -->
+<section id="output">
+  <div class="container">
+    <div class="section-label">What You See</div>
+    <h2 class="section-title">Predicted <span style="color:var(--green)">Output Types</span></h2>
+    <div class="grid-3" style="margin-bottom:2.5rem">
+      <div class="result-card fade-in">
+        <div style="font-size:.72rem;color:var(--muted);margin-bottom:.7rem">✅ HEALTHY LEAF</div>
+        <div style="font-size:1.05rem;font-weight:800;color:var(--green);margin-bottom:.2rem">Healthy</div>
+        <div style="font-size:.8rem;color:var(--muted);margin-bottom:.7rem">Mangifera indica (Normal)</div>
+        <div class="conf-bar"><div class="conf-fill" style="width:94%"></div></div>
+        <div style="font-size:.8rem;display:flex;justify-content:space-between"><span>Confidence</span><span class="hl">94.7%</span></div>
+        <div style="margin-top:.7rem;font-size:.78rem;color:var(--green)">✓ No treatment needed</div>
+      </div>
+      <div class="result-card fade-in">
+        <div style="font-size:.72rem;color:var(--muted);margin-bottom:.7rem">🔴 DISEASED LEAF</div>
+        <div style="font-size:1.05rem;font-weight:800;color:#f87171;margin-bottom:.2rem">Anthracnose</div>
+        <div style="font-size:.8rem;color:var(--muted);margin-bottom:.7rem">Colletotrichum gloeosporioides</div>
+        <div class="conf-bar"><div class="conf-fill" style="width:93%;background:linear-gradient(90deg,#ef4444,#f87171)"></div></div>
+        <div style="font-size:.8rem;display:flex;justify-content:space-between"><span>Confidence</span><span style="color:#f87171">93.1%</span></div>
+        <div style="margin-top:.7rem;font-size:.78rem;color:#f87171">→ Apply copper fungicide</div>
+      </div>
+      <div class="result-card fade-in">
+        <div style="font-size:.72rem;color:var(--muted);margin-bottom:.7rem">⚠️ NOT A MANGO</div>
+        <div style="font-size:1.05rem;font-weight:800;color:var(--yellow);margin-bottom:.2rem">Rejected</div>
+        <div style="font-size:.8rem;color:var(--muted);margin-bottom:.7rem">HTTP 422 Error Response</div>
+        <div class="conf-bar"><div class="conf-fill" style="width:13%;background:linear-gradient(90deg,var(--yellow),#fbbf24)"></div></div>
+        <div style="font-size:.8rem;display:flex;justify-content:space-between"><span>Mango confidence</span><span style="color:var(--yellow)">13.4%</span></div>
+        <div style="margin-top:.7rem;font-size:.78rem;color:var(--yellow)">→ Upload a mango image</div>
+      </div>
+    </div>
+    <h3 style="margin-bottom:1.1rem;font-size:1rem">All 7 Disease Classes</h3>
+    <div class="grid-4" id="diseaseGrid"></div>
+  </div>
+</section>
+
+<!-- ARCHITECTURE -->
+<section id="architecture" style="background:var(--bg2)">
+  <div class="container">
+    <div class="section-label">How It Works</div>
+    <h2 class="section-title">System <span style="color:var(--green)">Architecture</span></h2>
+    <div class="grid-2" style="align-items:start;gap:2.5rem">
+      <div>
+        <div style="display:flex;flex-direction:column;gap:.45rem">
+          <div class="arch-box" style="background:rgba(59,130,246,.1);border-color:rgba(59,130,246,.3)">📸 Input: Image (JPG/PNG/WebP/BMP)<div class="arch-label">Any mango leaf or fruit photo</div></div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-row">
+            <div class="arch-box" style="background:rgba(168,85,247,.1);border-color:rgba(168,85,247,.3)">🔍 CLIP Validation<div class="arch-label">"Is this a mango?"</div></div>
+            <div style="color:var(--red);font-size:.78rem;text-align:center;min-width:80px">❌ Not mango<br>→ HTTP 422</div>
+          </div>
+          <div class="arch-arrow">↓ ✅ Is mango</div>
+          <div class="arch-box" style="background:rgba(234,179,8,.1);border-color:rgba(234,179,8,.3)">🧠 AA-ENet Classification<div class="arch-label">EfficientNet-B0 + CBAM + Transformer</div></div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-row">
+            <div class="arch-box" style="background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3)">📊 Scores<div class="arch-label">7 class probabilities</div></div>
+            <div class="arch-box" style="background:rgba(34,197,94,.1);border-color:rgba(34,197,94,.3)">🌡️ Grad-CAM++<div class="arch-label">Heatmap visualization</div></div>
+          </div>
+          <div class="arch-arrow">↓</div>
+          <div class="arch-box" style="background:rgba(34,197,94,.15);border-color:var(--green)">✅ JSON Result / PDF Report</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:.9rem">
+        <div class="card"><div class="card-title">🧠 AA-ENet Model</div><div class="card-desc">Custom EfficientNet-B0 + CBAM + Transformer. Trained on Amropali mango dataset.</div><div class="tags"><span class="tag green">EfficientNet-B0</span><span class="tag blue">CBAM</span><span class="tag purple">Transformer</span></div></div>
+        <div class="card"><div class="card-title">🔍 CLIP Validation</div><div class="card-desc">OpenAI CLIP (ViT-B/32) confirms the image is a mango before running diagnosis.</div><div class="tags"><span class="tag purple">CLIP ViT-B/32</span><span class="tag blue">Zero-shot</span></div></div>
+        <div class="card"><div class="card-title">📦 Package Info v0.1.3</div><div class="card-desc">Self-contained: AI model, server, docs all bundled. Works from any folder.</div><div class="tags"><span class="tag green">PyPI</span><span class="tag blue">mango-api</span><span class="tag yellow">fpdf2</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CHEAT SHEET -->
+<section>
+  <div class="container">
+    <div class="section-label">All Commands</div>
+    <h2 class="section-title">📋 <span style="color:var(--green)">Cheat Sheet</span></h2>
+    <div class="code-wrap">
+      <div class="terminal">
+        <div class="terminal-bar"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div><span class="terminal-title">Quick Reference — Every Command</span></div>
+        <div class="terminal-body" style="font-size:.81rem;line-height:2.1">
+          <div><span class="t-comment"># ── INSTALL ──────────────────────────────────────────</span></div>
+          <div><span class="t-prompt">PS&gt;</span> <span class="t-cmd">pip install "mango-disease-ai[api]"</span></div>
+          <div><span class="t-prompt">PS&gt;</span> <span class="t-cmd">pip install --upgrade "mango-disease-ai[api]"</span></div>
+          <div style="margin-top:.25rem"><span class="t-comment"># ── VERIFY ───────────────────────────────────────────</span></div>
+          <div><span class="t-prompt">PS&gt;</span> <span class="t-cmd">python -c "import mango_disease_ai; print(mango_disease_ai.__version__)"</span></div>
+          <div style="margin-top:.25rem"><span class="t-comment"># ── START SERVER (from ANY folder) ───────────────────</span></div>
+          <div><span class="t-prompt">PS&gt;</span> <span class="t-cmd">mango-api</span></div>
+          <div><span class="t-prompt">PS&gt;</span> <span class="t-cmd">mango-api --port 8080</span></div>
+          <div><span class="t-prompt">PS&gt;</span> <span class="t-cmd">mango-api --help</span></div>
+          <div><span class="t-prompt">PS&gt;</span> <span class="t-cmd">python -m mango_disease_ai.server</span></div>
+          <div style="margin-top:.25rem"><span class="t-comment"># ── OPEN IN BROWSER ──────────────────────────────────</span></div>
+          <div><span class="t-prompt">PS&gt;</span> <span class="t-cmd">start http://localhost:8000</span>      <span class="t-comment">← Welcome page</span></div>
+          <div><span class="t-prompt">PS&gt;</span> <span class="t-cmd">start http://localhost:8000/guide</span>  <span class="t-comment">← Full animated docs</span></div>
+          <div><span class="t-prompt">PS&gt;</span> <span class="t-cmd">start http://localhost:8000/docs</span>   <span class="t-comment">← Swagger UI testing</span></div>
+          <div style="margin-top:.25rem"><span class="t-comment"># ── STOP SERVER ──────────────────────────────────────</span></div>
+          <div><span class="t-warn">CTRL + C</span>  <span class="t-comment">(in the terminal where mango-api is running)</span></div>
+        </div>
+      </div>
+      <button class="copy-btn" onclick='copyCode("pip install \"mango-disease-ai[api]\"\nmango-api")'>Copy Install+Start</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">🥭 <span>MangoAI</span></div>
+    <div class="footer-desc">mango-disease-ai v0.1.3 · AIUB R&D ICCA Research Group · MIT License</div>
+    <div class="footer-links">
+      <a href="https://pypi.org/project/mango-disease-ai/" target="_blank">📦 PyPI</a>
+      <a href="http://localhost:8000/docs" target="_blank">📖 Swagger UI</a>
+      <a href="http://localhost:8000/api/health" target="_blank">❤️ Health Check</a>
+      <a href="#quickstart">⚡ Quick Start</a>
+      <a href="#api">🌐 REST API</a>
+      <a href="#architecture">🏗️ Architecture</a>
+    </div>
+    <div class="footer-copy">Made with ❤️ by AIUB R&D ICCA · 2026</div>
+  </div>
+</footer>
+
+<script>
+function switchTab(group, name) {
+  document.querySelectorAll(`[id^="${group}-"]`).forEach(el => el.classList.remove('active'));
+  document.querySelectorAll(`#${group}Tabs .tab`).forEach(el => el.classList.remove('active'));
+  document.getElementById(`${group}-${name}`).classList.add('active');
+  event.target.classList.add('active');
+}
+function copyCode(text) {
+  navigator.clipboard.writeText(text).catch(() => {
+    const ta = document.createElement('textarea'); ta.value = text;
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+  });
+  const btn = event.target;
+  btn.textContent = '✓ Copied!'; btn.classList.add('copied');
+  setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1800);
+}
+function toggleStep(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+}
+
+// Scroll animations
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// Disease grid
+const diseases = [
+  {name:'Healthy', sci:'Mangifera indica', pct:95, color:'#22c55e'},
+  {name:'Anthracnose', sci:'C. gloeosporioides', pct:93, color:'#ef4444'},
+  {name:'Bacterial Canker', sci:'Xanthomonas campestris', pct:91, color:'#f97316'},
+  {name:'Powdery Mildew', sci:'Oidium mangiferae', pct:90, color:'#a855f7'},
+  {name:'Scab', sci:'Elsinoe mangiferae', pct:89, color:'#eab308'},
+  {name:'Sooty Mould', sci:'Capnodium mangiferae', pct:88, color:'#64748b'},
+  {name:'Stem End Rot', sci:'Lasiodiplodia theobromae', pct:87, color:'#06b6d4'},
+];
+const grid = document.getElementById('diseaseGrid');
+diseases.forEach(d => {
+  grid.innerHTML += `<div class="disease-item"><div class="disease-name">${d.name}</div><div class="disease-sci">${d.sci}</div><div class="conf-bar"><div class="conf-fill" style="width:${d.pct}%;background:linear-gradient(90deg,${d.color},${d.color}99)"></div></div><div style="font-size:.7rem;color:var(--muted)">~${d.pct}% accuracy</div></div>`;
+});
+
+// Active nav
+const sections = document.querySelectorAll('section[id]');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 80) cur = s.id; });
+  document.querySelectorAll('.nav-links a').forEach(a => {
+    a.style.color = a.getAttribute('href') === `#${cur}` ? 'var(--green)' : '';
+  });
+});
+
+// Auto-open first step, close rest
+document.querySelectorAll('.step-card').forEach((c,i) => {
+  if (i > 0) c.classList.remove('open');
+});
+</script>
+</body>
+</html>

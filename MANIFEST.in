@@ -1,0 +1,3 @@
+include README_PACKAGE.md
+include LICENSE
+recursive-include mango_disease_ai *.py *.pt *.pth *.json *.ttf *.txt
